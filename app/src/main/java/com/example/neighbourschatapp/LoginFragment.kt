@@ -26,6 +26,7 @@ class LoginFragment: Fragment() {
             performLogin()
         }
 
+        //Denna lyssnare skickar användaren till fragmentet för registrering
         tvGoToRegister.setOnClickListener {
 
             val transaction: FragmentTransaction = this.fragmentManager!!.beginTransaction()
@@ -36,6 +37,7 @@ class LoginFragment: Fragment() {
 
         return view
     }
+    //Denna funktion loggar in användaren om denna har ett existerande användarkonto.
     private fun performLogin() {
         val eMail = email_edittext_login.text.toString()
         val password = password_edittext_login.text.toString()
