@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">NeighboursChatApp</string>
+    <string name="hello_login_fragment">Hello login fragment</string>
+    <string name="hello_register_fragment">Hello register fragment</string>
 </resources>
