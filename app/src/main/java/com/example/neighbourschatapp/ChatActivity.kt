@@ -27,6 +27,7 @@ class ChatActivity : AppCompatActivity() {
 
         fetchUsers()
     }
+    //Denna funktion laddar alla registrerade användare i en recyclerview
     private fun fetchUsers() {
         val ref = FirebaseDatabase.getInstance().getReference("/users")
         ref.addListenerForSingleValueEvent(object: ValueEventListener {
@@ -43,7 +44,6 @@ class ChatActivity : AppCompatActivity() {
                 }
                 rcvNewMessages.adapter = adapter
             }
-
         })
     }
 
