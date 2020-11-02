@@ -34,6 +34,7 @@ class RegisterFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view: View = inflater.inflate(R.layout.fragment_register, container, false)
 
+        //Här sätter jag rätt variabel till rätt knapp, textView etc..
         btnSelectPhotoRegister = view.findViewById(R.id.btn_select_photo_register)
         ivSelectedImage = view.findViewById(R.id.iv_selected_photo)
         val btnRegister: Button = view.findViewById(R.id.register_button_register)
@@ -43,6 +44,7 @@ class RegisterFragment: Fragment() {
             performRegistration()
         }
 
+        //Denna klicklyssnare låter användaren välja en bild från den enhet som appen används på
         btnSelectPhotoRegister.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
@@ -50,6 +52,7 @@ class RegisterFragment: Fragment() {
             Log.d("Main", "try to select photo")
         }
 
+        //Denna knapp skickar användaren tillbaka till inloggningssidan
         tvBackToLogin.setOnClickListener {
             val transaction: FragmentTransaction = this.fragmentManager!!.beginTransaction()
             val frag: Fragment = LoginFragment()
@@ -80,11 +83,17 @@ class RegisterFragment: Fragment() {
                     ImageDecoder.decodeBitmap(source)
                 }
             }
-            //Här skapar jag en bitmap drawable som jag sedan sätter som bild till btnSelectePhoto...
+            //Här skapar jag en bitmap drawable som jag sedan sätter som bild till ivSelectedImage.
             ivSelectedImage.setImageBitmap(bitmap)
+            //Här ändrar jag så att btnSelectedPhoto.. ligger bakom ivSelectedImage och då inte längre syns
             btnSelectPhotoRegister.alpha = 0f
         }
     }
+    /*
+    Denna funktion skapar en ny användare i firebase databas. Funktionen använder onComplete och onFailure lyssnare.
+    Om allt är ifyllt korrekt så skickas användaren till nästa funktion annars så visas en toast där användaren
+    meddelas vad som inte är ifyllt korrekt.
+     */
     private fun performRegistration() {
         val eMail = email_edittext_register.text.toString()
         val password = password_edittext_register.text.toString()
@@ -109,6 +118,7 @@ class RegisterFragment: Fragment() {
 
             }
     }
+    //Denna funktion laddar upp användarens valda bild till firebase storage.
     private fun uploadImageToFirebaseStorage() {
         if (selectedPhotoUri == null) return
 
