@@ -9,6 +9,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //Här laddar jag LoginFragment så fort mainactivity startas.
         loadFragment(LoginFragment())
     }
     //Denna funktion skapar fragmentet i mainActivity
