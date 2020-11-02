@@ -5,9 +5,9 @@
     <string name="e_mail">E-mail</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
-    <string name="back_to_registration">Back to registration</string>
+    <string name="go_to_registration">Dont have an account? Go to registration</string>
     <string name="select_photo">Select photo</string>
     <string name="user_name">Username</string>
     <string name="register">Register</string>
-    <string name="already_have_account">Already have an account?</string>
+    <string name="back_to_login">Back to login</string>
 </resources>
