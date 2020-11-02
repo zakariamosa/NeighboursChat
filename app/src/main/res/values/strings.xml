@@ -6,4 +6,8 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="back_to_registration">Back to registration</string>
+    <string name="select_photo">Select photo</string>
+    <string name="user_name">Username</string>
+    <string name="register">Register</string>
+    <string name="already_have_account">Already have an account?</string>
 </resources>
