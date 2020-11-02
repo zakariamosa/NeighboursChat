@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "129479041092",
+    "firebase_url": "https://neighbourschat-352b6.firebaseio.com",
+    "project_id": "neighbourschat-352b6",
+    "storage_bucket": "neighbourschat-352b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:129479041092:android:4cf5e9637b1ff0fd48dc11",
+        "android_client_info": {
+          "package_name": "com.example.neighbourschatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "129479041092-mp100a4a6eu49jequfrjvbkcj68o8s1i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsLNhhzgIrhLvuslJ4pjQNlb5iIIdsli0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "129479041092-mp100a4a6eu49jequfrjvbkcj68o8s1i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
