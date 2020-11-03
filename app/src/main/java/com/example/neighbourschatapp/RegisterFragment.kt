@@ -19,6 +19,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentTransaction
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.fragment_register.*
@@ -141,11 +142,13 @@ class RegisterFragment: Fragment() {
     }
     private fun saveUserToFirebaseDatabase(userImageUrl: String) {
         val userId = FirebaseAuth.getInstance().uid ?: ""
-        val ref = FirebaseDatabase.getInstance().getReference("/users/$userId")
+        //val ref = FirebaseDatabase.getInstance().getReference("/users/$userId")
+        val db = FirebaseFirestore.getInstance()
 
         val user = User(userId, username_edittext_register.text.toString(), email_edittext_register.text.toString(), userImageUrl)
 
-        ref.setValue(user)
+        //ref.setValue(user)
+                db.collection("users").add(user)
             .addOnSuccessListener {
                 Log.d("Register", "We finally saved the user to firebase database!!")
 
