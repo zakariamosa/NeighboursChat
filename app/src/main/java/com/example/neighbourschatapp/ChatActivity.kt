@@ -1,10 +1,14 @@
 package com.example.neighbourschatapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
@@ -12,38 +16,34 @@ import com.xwray.groupie.ViewHolder
 
 
 class ChatActivity : AppCompatActivity() {
-
-    lateinit var rcvUsers: RecyclerView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
-        rcvUsers = findViewById(R.id.recycler_view_users)
-        val adapter = GroupAdapter <ViewHolder>()
-
-        rcvUsers.adapter = adapter
-
-
-        fetchUsers()
     }
-    //Denna funktion laddar alla registrerade användare i en recyclerview
-    private fun fetchUsers() {
-
-        val db = FirebaseFirestore.getInstance()
-        val adapter = GroupAdapter <ViewHolder>()
-
-        val itemRef = db.collection("users")
-
-        itemRef.get().addOnSuccessListener {documentSnapshot ->
-            for (document in documentSnapshot.documents) {
-
-                val user = document.toObject(User::class.java)
-                if (user != null) {
-                    adapter.add(UserItem(user))
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_profile -> {
+                val intent = Intent(this, ProfileActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+            R.id.menu_new_message -> {
+                val intent = Intent(this, NewMessageActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+            R.id.menu_settings -> {
+                val intent = Intent(this, SettingsActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
             }
         }
-                rcvUsers.adapter = adapter
-        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.action_bar_nav_menu, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 }

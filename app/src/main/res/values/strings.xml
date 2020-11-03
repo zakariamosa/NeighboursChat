@@ -10,4 +10,7 @@
     <string name="user_name">Username</string>
     <string name="register">Register</string>
     <string name="back_to_login">Back to login</string>
+    <string name="profile">Profile</string>
+    <string name="new_message">New Message</string>
+    <string name="settings">Settings</string>
 </resources>
