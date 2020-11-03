@@ -16,6 +16,20 @@ class ChatLogActivity : AppCompatActivity() {
 
         val adapter = GroupAdapter <ViewHolder>()
 
+        adapter.add(ChatItemFrom())
+        adapter.add(ChatItemTo())
+        adapter.add(ChatItemFrom())
+        adapter.add(ChatItemTo())
+        adapter.add(ChatItemFrom())
+        adapter.add(ChatItemTo())
+        adapter.add(ChatItemFrom())
+        adapter.add(ChatItemTo())
+        adapter.add(ChatItemFrom())
+        adapter.add(ChatItemTo())
+        adapter.add(ChatItemFrom())
+        adapter.add(ChatItemTo())
+
+
         rcvChatLog.adapter = adapter
     }
 }
