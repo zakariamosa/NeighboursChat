@@ -15,7 +15,7 @@ class NewMessageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_message)
 
-        supportActionBar?.title = "Find new chat-friends"
+        supportActionBar?.title = "Start a new chat-conversation"
 
 
         rcvUsers = findViewById(R.id.recycler_view_users)
@@ -26,7 +26,7 @@ class NewMessageActivity : AppCompatActivity() {
 
         fetchUsers()
     }
-    //Denna funktion laddar alla registrerade användare i en recyclerview
+    //Denna funktion laddar alla registrerade användare i en recyclerview i realtid, men laddar listan två gånger
     private fun fetchUsers() {
 
         val db = FirebaseFirestore.getInstance()
@@ -34,6 +34,19 @@ class NewMessageActivity : AppCompatActivity() {
 
         val itemRef = db.collection("users")
 
+        itemRef.addSnapshotListener {snapshot, e ->
+            if (snapshot != null) {
+
+                for (document in snapshot.documents) {
+
+                    val user = document.toObject(User::class.java)
+                    if (user != null) {
+                        adapter.add(UserItem(user))
+                    }
+            }
+        }
+/*
+Denna funktion laddar listan en gång men importerar inte nya användare i realtid.
         itemRef.get().addOnSuccessListener {documentSnapshot ->
             for (document in documentSnapshot.documents) {
 
@@ -42,6 +55,8 @@ class NewMessageActivity : AppCompatActivity() {
                     adapter.add(UserItem(user))
                 }
             }
+
+ */
             rcvUsers.adapter = adapter
         }
     }
