@@ -142,13 +142,11 @@ class RegisterFragment: Fragment() {
     }
     private fun saveUserToFirebaseDatabase(userImageUrl: String) {
         val userId = FirebaseAuth.getInstance().uid ?: ""
-        //val ref = FirebaseDatabase.getInstance().getReference("/users/$userId")
         val db = FirebaseFirestore.getInstance()
 
         val user = User(userId, username_edittext_register.text.toString(), email_edittext_register.text.toString(), userImageUrl)
 
-        //ref.setValue(user)
-                db.collection("users").add(user)
+        db.collection("users").add(user)
             .addOnSuccessListener {
                 Log.d("Register", "We finally saved the user to firebase database!!")
 

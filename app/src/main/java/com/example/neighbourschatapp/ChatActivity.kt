@@ -43,23 +43,7 @@ class ChatActivity : AppCompatActivity() {
                     adapter.add(UserItem(user))
             }
         }
-        /*
-         val ref = FirebaseDatabase.getInstance().getReference("/users")
-         ref.addListenerForSingleValueEvent(object: ValueEventListener {
-             override fun onCancelled(error: DatabaseError) {}
-
-             override fun onDataChange(snapshot: DataSnapshot) {
-                 val adapter = GroupAdapter <ViewHolder>()
-                 snapshot.children.forEach {
-                     Log.d("NewMessage", it.toString())
-                     val user = it.getValue(User::class.java)
-                     if (user != null) {
-                         adapter.add(UserItem(user))
-                     }
-                 }
-
-         */
                 rcvUsers.adapter = adapter
-            }
+        }
     }
 }
