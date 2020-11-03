@@ -15,6 +15,9 @@ class NewMessageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_message)
 
+        supportActionBar?.title = "Find new chat-friends"
+
+
         rcvUsers = findViewById(R.id.recycler_view_users)
         val adapter = GroupAdapter <ViewHolder>()
 
