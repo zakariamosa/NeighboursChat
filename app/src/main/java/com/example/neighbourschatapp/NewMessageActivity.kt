@@ -1,5 +1,7 @@
 package com.example.neighbourschatapp
 
+import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
@@ -17,10 +19,8 @@ class NewMessageActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Start a new chat-conversation"
 
-
         rcvUsers = findViewById(R.id.recycler_view_users)
         val adapter = GroupAdapter <ViewHolder>()
-
         rcvUsers.adapter = adapter
 
 
@@ -45,18 +45,12 @@ class NewMessageActivity : AppCompatActivity() {
                     }
             }
         }
-/*
-Denna funktion laddar listan en gång men importerar inte nya användare i realtid.
-        itemRef.get().addOnSuccessListener {documentSnapshot ->
-            for (document in documentSnapshot.documents) {
+            adapter.setOnItemClickListener { item, view ->
+                val intent = Intent(view.context, ChatLogActivity::class.java)
+                startActivity(intent)
+                finish()
 
-                val user = document.toObject(User::class.java)
-                if (user != null) {
-                    adapter.add(UserItem(user))
-                }
             }
-
- */
             rcvUsers.adapter = adapter
         }
     }
