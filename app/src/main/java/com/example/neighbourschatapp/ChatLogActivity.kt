@@ -11,8 +11,8 @@ class ChatLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
 
-        val username = intent.getStringExtra("username")
-        supportActionBar?.title = username
+        val user = intent.getParcelableExtra<User>("username")
+        supportActionBar?.title = user?.userName
         var rcvChatLog: RecyclerView = findViewById(R.id.recycler_view_chat_log)
 
         val adapter = GroupAdapter <ViewHolder>()
