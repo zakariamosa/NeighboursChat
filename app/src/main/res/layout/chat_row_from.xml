@@ -7,14 +7,15 @@
     android:layout_marginBottom="8dp">
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/tv_from_row"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/rounded_edittext_register_login"
+        android:background="@drawable/text_message_from"
         android:maxWidth="240dp"
         android:padding="16dp"
+        android:textColor="@android:color/white"
         android:text="This is the message I send"
         app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="parent" />
