@@ -6,10 +6,12 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
+import android.os.PersistableBundle
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.*
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -34,8 +36,6 @@ class NewMessageActivity : AppCompatActivity() {
         val adapter = GroupAdapter <ViewHolder>()
         rcvUsers.adapter = adapter
 
-
-        //fetchUsers()
         locationProvider = LocationServices.getFusedLocationProviderClient(this)
 
         locationCallback = object : LocationCallback() {
@@ -57,23 +57,19 @@ class NewMessageActivity : AppCompatActivity() {
                     currentuserlat = location.latitude
                     currentuserlong = location.longitude
                     Log.d("!!!", "last location lat: $currentuserlat, lng: $currentuserlong")
-                    //will save this in user table
                     fetchUsers()
+                    //will save this in user table
                 }
             }
-
         }
-
         locationRequest = creatLocationRequest()
-
-
     }
     //Denna funktion laddar alla registrerade användare i en recyclerview i realtid, men laddar listan två gånger
     private fun fetchUsers() {
 
         val db = FirebaseFirestore.getInstance()
         val adapter = GroupAdapter <ViewHolder>()
-
+        val currentUser = FirebaseAuth.getInstance().currentUser
         val itemRef = db.collection("users")
 
         itemRef.addSnapshotListener {snapshot, e ->
@@ -82,7 +78,8 @@ class NewMessageActivity : AppCompatActivity() {
                 for (document in snapshot.documents) {
 
                     val user = document.toObject(User::class.java)
-                    if (user != null) {
+                    if (user != null && currentUser?.uid != user.userId) {
+                        Log.d("!!!!", "$currentuserlat and $currentuserlong")
                         if (isneighbours(user)){
                             adapter.add(UserItem(user))
                         }
@@ -102,7 +99,6 @@ class NewMessageActivity : AppCompatActivity() {
         }
     }
 
-    //Denna delen hanterar location
     override fun onResume() {
         super.onResume()
 
@@ -115,13 +111,11 @@ class NewMessageActivity : AppCompatActivity() {
         stopLocationUpdates()
     }
 
-
     fun startLocationUpdates() {
         if( ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED) {
             locationProvider.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         }
-
     }
 
     fun stopLocationUpdates() {
@@ -135,8 +129,6 @@ class NewMessageActivity : AppCompatActivity() {
                 priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             }
 
-
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if(requestCode == REQUEST_LOCATION ) {
             if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED ) {
@@ -146,7 +138,6 @@ class NewMessageActivity : AppCompatActivity() {
                 Log.d("!!!", "Permission denied")
             }
         }
-
     }
 
     //Here getting distance in kilometers (km)
@@ -173,12 +164,10 @@ class NewMessageActivity : AppCompatActivity() {
 
     private fun isneighbours(usr:User):Boolean{
 
-
         val distancefrommeinkm=distance(currentuserlat,currentuserlong,usr.lastLocationLat,usr.lastLocationLong)
         if (distancefrommeinkm<5){
             return true
         }
         return false
-
     }
 }

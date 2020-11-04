@@ -186,7 +186,8 @@ class RegisterFragment: Fragment() {
     private fun saveUserToFirebaseDatabase(userImageUrl: String) {
         val userId = FirebaseAuth.getInstance().uid ?: ""
         val db = FirebaseFirestore.getInstance()
-        val user = User(userId, username_edittext_register.text.toString(), email_edittext_register.text.toString(), userImageUrl,currentuserlat,currentuserlong)
+        val user = User(userId, username_edittext_register.text.toString(), email_edittext_register.text.toString(), userImageUrl,
+            currentuserlat,currentuserlong)
 
         db.collection("users").document(userId).set(user)
             .addOnSuccessListener {
@@ -250,7 +251,4 @@ class RegisterFragment: Fragment() {
         }
 
     }
-
-
-
 }
