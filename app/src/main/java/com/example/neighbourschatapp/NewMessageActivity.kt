@@ -10,6 +10,7 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.*
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -72,7 +73,7 @@ class NewMessageActivity : AppCompatActivity() {
 
         val db = FirebaseFirestore.getInstance()
         val adapter = GroupAdapter <ViewHolder>()
-
+        var currentUser = FirebaseAuth.getInstance().currentUser
         val itemRef = db.collection("users")
 
         itemRef.addSnapshotListener {snapshot, e ->
@@ -81,7 +82,7 @@ class NewMessageActivity : AppCompatActivity() {
                 for (document in snapshot.documents) {
 
                     val user = document.toObject(User::class.java)
-                    if (user != null) {
+                    if (user != null && currentUser?.uid != user.userId) {
                         if (isneighbours(user)){
                             adapter.add(UserItem(user))
                         }
