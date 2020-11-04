@@ -36,8 +36,6 @@ class NewMessageActivity : AppCompatActivity() {
         val adapter = GroupAdapter <ViewHolder>()
         rcvUsers.adapter = adapter
 
-
-        //fetchUsers()
         locationProvider = LocationServices.getFusedLocationProviderClient(this)
 
         locationCallback = object : LocationCallback() {
@@ -64,7 +62,6 @@ class NewMessageActivity : AppCompatActivity() {
                 }
             }
         }
-
         locationRequest = creatLocationRequest()
     }
     //Denna funktion laddar alla registrerade användare i en recyclerview i realtid, men laddar listan två gånger
