@@ -2,13 +2,14 @@ package com.example.neighbourschatapp
 
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,10 +17,13 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.gms.location.*
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.storage.FirebaseStorage
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.fragment_register.*
@@ -30,6 +34,13 @@ class RegisterFragment: Fragment() {
     lateinit var btnSelectPhotoRegister: Button
     lateinit var ivSelectedImage: CircleImageView
     private var selectedPhotoUri: Uri? = null
+    private val REQUEST_LOCATION = 1
+    lateinit var locationProvider: FusedLocationProviderClient
+    var locationRequest : LocationRequest? = null
+    lateinit var locationCallback: LocationCallback
+    private var currentuserlat:Double=0.0
+    private var currentuserlong:Double=0.0
+    lateinit var thisactivity:Activity
 
     @ExperimentalStdlibApi
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -61,6 +72,38 @@ class RegisterFragment: Fragment() {
             transaction.commit()
         }
 
+
+        thisactivity= getActivity()!!
+        locationProvider = LocationServices.getFusedLocationProviderClient(thisactivity!!)
+
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+
+                for(location in locationResult.locations ) {
+                    Log.d("!!!", "lat: ${location.latitude} lng: ${location.longitude}")
+                }
+            }
+        }
+
+        if( ActivityCompat.checkSelfPermission(thisactivity!!.baseContext, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+            Log.d("!!!", "no permission")
+            ActivityCompat.requestPermissions(thisactivity, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                    REQUEST_LOCATION)
+        } else {
+            locationProvider.lastLocation.addOnSuccessListener { location ->
+                if (location != null) {
+                    currentuserlat = location.latitude
+                    currentuserlong = location.longitude
+                    Log.d("!!!", "last location lat: $currentuserlat, lng: $currentuserlong")
+                    //will save this in user table
+                }
+            }
+
+        }
+
+        locationRequest = creatLocationRequest()
+
         return view
     }
 
@@ -76,8 +119,8 @@ class RegisterFragment: Fragment() {
             //Här använder jag två olika alternativ för att hämta skapa bitmap. Det senare alternativet fungerar inte på modeller äldre än version 28
             val bitmap = when {
                 Build.VERSION.SDK_INT < 28 -> MediaStore.Images.Media.getBitmap(
-                    activity!!.applicationContext.contentResolver,
-                    selectedPhotoUri
+                        activity!!.applicationContext.contentResolver,
+                        selectedPhotoUri
                 )
                 else -> {
                     val source = ImageDecoder.createSource(activity!!.applicationContext.contentResolver, selectedPhotoUri!!)
@@ -103,7 +146,7 @@ class RegisterFragment: Fragment() {
             Toast.makeText(activity!!.applicationContext, "Please enter both e-mail and password", Toast.LENGTH_SHORT).show()
             return
         }
-        Log.d("Register","Email is $eMail")
+        Log.d("Register", "Email is $eMail")
         Log.d("Register", "Password is $password")
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(eMail, password)
@@ -143,10 +186,9 @@ class RegisterFragment: Fragment() {
     private fun saveUserToFirebaseDatabase(userImageUrl: String) {
         val userId = FirebaseAuth.getInstance().uid ?: ""
         val db = FirebaseFirestore.getInstance()
+        val user = User(userId, username_edittext_register.text.toString(), email_edittext_register.text.toString(), userImageUrl,currentuserlat,currentuserlong)
 
-        val user = User(userId, username_edittext_register.text.toString(), email_edittext_register.text.toString(), userImageUrl)
-
-        db.collection("users").add(user)
+        db.collection("users").document(userId).set(user)
             .addOnSuccessListener {
                 Log.d("Register", "We finally saved the user to firebase database!!")
 
@@ -159,4 +201,56 @@ class RegisterFragment: Fragment() {
                 Log.d("Register", "Failed to add user")
             }
     }
+
+
+
+    //Denna delen hanterar location
+    override fun onResume() {
+        super.onResume()
+
+        startLocationUpdates()
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        stopLocationUpdates()
+    }
+
+
+    fun startLocationUpdates() {
+        if( ActivityCompat.checkSelfPermission(thisactivity!!.baseContext, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+                PackageManager.PERMISSION_GRANTED) {
+            locationProvider.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
+        }
+
+    }
+
+    fun stopLocationUpdates() {
+        locationProvider.removeLocationUpdates(locationCallback)
+    }
+
+    fun creatLocationRequest()  =
+            LocationRequest.create().apply{
+                interval = 2000
+                fastestInterval = 1000
+                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            }
+
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if(requestCode == REQUEST_LOCATION ) {
+            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED ) {
+                Log.d("!!!", "Permission granted")
+                startLocationUpdates()
+            } else {
+                Log.d("!!!", "Permission denied")
+            }
+        }
+
+    }
+
+
+
 }
