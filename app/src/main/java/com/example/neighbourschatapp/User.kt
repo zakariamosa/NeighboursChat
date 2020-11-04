@@ -12,6 +12,8 @@ från NewMessageActivity.
 class User (val userId: String,
             val userName: String,
             val userEmail: String,
-            val userImageUrl: String): Parcelable {
-    constructor() : this ("","","","")
+            val userImageUrl: String,
+            val lastLocationLat: Double,
+            val lastLocationLong: Double): Parcelable {
+    constructor() : this ("","","","",0.0,0.0)
 }
