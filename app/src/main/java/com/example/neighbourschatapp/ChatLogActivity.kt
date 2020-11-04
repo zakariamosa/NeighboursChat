@@ -8,9 +8,11 @@ import android.widget.EditText
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import java.sql.Timestamp
 import java.util.*
 
 class ChatLogActivity : AppCompatActivity() {
@@ -18,7 +20,6 @@ class ChatLogActivity : AppCompatActivity() {
     companion object {
         val TAG = "ChatLog"
     }
-
     private lateinit var rcvChatLog: RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,25 +31,48 @@ class ChatLogActivity : AppCompatActivity() {
         val btnSendChatLog: Button = findViewById(R.id.btn_send_chat_log)
 
         //setupDummyData()
+        //listenForMessages()
         listenForMessages()
 
         btnSendChatLog.setOnClickListener {
-            Log.d(TAG, "Try to send message....")
+            //Log.d(TAG, "Try to send message....")
             performSendMessage()
         }
     }
     private fun listenForMessages() {
         val db = FirebaseFirestore.getInstance()
-        db.collection("messages/").addSnapshotListener { snapshot, e ->
+        db.collection("/messages")
+            .addSnapshotListener { snapshots, e ->
+                if (e != null) {
+                    Log.w(TAG, "listen:error", e)
+                    return@addSnapshotListener
+                }
+                for (dc in snapshots!!.documentChanges) {
+                    when (dc.type) {
+                        DocumentChange.Type.ADDED -> {val chatMessage = dc.document.toObject(ChatMessage::class.java);
+                        Log.d(TAG, chatMessage.text)}
+                        DocumentChange.Type.MODIFIED -> Log.d(TAG, "Modified city: ${dc.document.data}")
+                        DocumentChange.Type.REMOVED -> Log.d(TAG, "Removed city: ${dc.document.data}")
+                    }
+                }
+            }
+    }
+/*
+    private fun listenForMessages() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("/messages").orderBy("timeStamp").addSnapshotListener { snapshot, e ->
             if (snapshot != null) {
                 for (document in snapshot.documents) {
-                    val chatMessage = document.toObject(ChatMessage::class.java)
-                    Log.d(TAG, chatMessage!!.text)
-                    }
 
+                    val chatMessage = document.toObject(ChatMessage::class.java)
+
+                        Log.d(TAG, chatMessage!!.text)
+                    }
             }
         }
     }
+
+ */
 
     private fun performSendMessage() {
         val etChatLog: EditText = findViewById(R.id.et_chat_log)
