@@ -58,6 +58,7 @@ class NewMessageActivity : AppCompatActivity() {
                     currentuserlong = location.longitude
                     Log.d("!!!", "last location lat: $currentuserlat, lng: $currentuserlong")
                     //will save this in user table
+                    fetchUsers()
                 }
             }
 
@@ -65,7 +66,7 @@ class NewMessageActivity : AppCompatActivity() {
 
         locationRequest = creatLocationRequest()
 
-        fetchUsers()
+
     }
     //Denna funktion laddar alla registrerade användare i en recyclerview i realtid, men laddar listan två gånger
     private fun fetchUsers() {
