@@ -97,16 +97,16 @@ class ChatLogActivity : AppCompatActivity() {
         if (fromId == null)
             return
 
-        //val chatMessage = ChatMessage(db.collection("/messages").document(messageId).id, text,
         val chatMessageFrom = ChatMessage(db.collection("user-messages")
             .document("/$fromId/$toId/$messageId").id, text,
-
             fromId, toId!!, System.currentTimeMillis()/1000)
-            //reference.setValue(chatMessage)
+
                 db.collection("user-messages").document("/$fromId/$toId/$messageId").set(chatMessageFrom)
                 .addOnSuccessListener {
                     Log.d(TAG, "saved our message")
+                    etChatLog.text.clear()
                 }
+
         val chatMessageTo = ChatMessage(db.collection("user-messages")
             .document("/$toId/$fromId/$messageId").id, text,
         fromId, toId!!, System.currentTimeMillis()/1000)
