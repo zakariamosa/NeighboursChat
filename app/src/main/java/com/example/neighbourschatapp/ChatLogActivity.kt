@@ -52,8 +52,10 @@ class ChatLogActivity : AppCompatActivity() {
     }
 
     private fun listenForMessages() {
+        val fromId = FirebaseAuth.getInstance().uid
+        val toId = toUser!!.userId
         val db = FirebaseFirestore.getInstance()
-        val query = db.collection("/messages").orderBy("timeStamp")
+        val query = db.collection("/user-messages/$fromId/$toId").orderBy("timeStamp")
 
         listener = query.addSnapshotListener { snapshots, e ->
                 if (e != null) {
@@ -86,7 +88,6 @@ class ChatLogActivity : AppCompatActivity() {
     private fun performSendMessage() {
         val etChatLog: EditText = findViewById(R.id.et_chat_log)
         val messageId = UUID.randomUUID().toString()
-        //val reference = FirebaseDatabase.getInstance().getReference("/messages").push()
         val db = FirebaseFirestore.getInstance()
         val text = etChatLog.text.toString()
         val fromId = FirebaseAuth.getInstance().uid
@@ -96,12 +97,22 @@ class ChatLogActivity : AppCompatActivity() {
         if (fromId == null)
             return
 
-        val chatMessage = ChatMessage(db.collection("/messages").document(messageId).id, text,
+        //val chatMessage = ChatMessage(db.collection("/messages").document(messageId).id, text,
+        val chatMessageFrom = ChatMessage(db.collection("user-messages")
+            .document("/$fromId/$toId/$messageId").id, text,
+
             fromId, toId!!, System.currentTimeMillis()/1000)
             //reference.setValue(chatMessage)
-                db.collection("/messages").document(messageId).set(chatMessage)
+                db.collection("user-messages").document("/$fromId/$toId/$messageId").set(chatMessageFrom)
                 .addOnSuccessListener {
                     Log.d(TAG, "saved our message")
                 }
+        val chatMessageTo = ChatMessage(db.collection("user-messages")
+            .document("/$toId/$fromId/$messageId").id, text,
+        fromId, toId!!, System.currentTimeMillis()/1000)
+        db.collection("user-messages").document("/$toId/$fromId/$messageId").set(chatMessageTo)
+            .addOnSuccessListener {
+                Log.d(TAG,"saved to message")
+            }
     }
 }
