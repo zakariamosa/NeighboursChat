@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -24,14 +25,33 @@ class ChatActivity : AppCompatActivity() {
     companion object {
         var currentUser: User? = null
     }
+    val adapter = GroupAdapter <ViewHolder>()
     private var listener: ListenerRegistration? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
 
+        val rcvLatestChat: RecyclerView = findViewById(R.id.recycler_view_latest_chat)
+        rcvLatestChat.adapter = adapter
+
+
+
+        listenForLatestMessages()
+
+
         fetchCurrentUser()
 
+    }
+
+    private fun listenForLatestMessages() {
+        val fromId = FirebaseAuth.getInstance().uid
+        val db = FirebaseFirestore.getInstance()
+        db.collection("/latest-messages/").document("/$fromId")
+            .addSnapshotListener { snapshot, e ->
+                val chatMessage = snapshot!!.toObject(ChatMessage::class.java)
+                adapter.add(LatestMessageChatRow(chatMessage!!))
+            }
     }
 
     private fun fetchCurrentUser() {

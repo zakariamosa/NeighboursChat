@@ -64,7 +64,7 @@ class ChatLogActivity : AppCompatActivity() {
                 }
                 for (dc in snapshots!!.documentChanges) {
                     if (dc.type == DocumentChange.Type.ADDED) {
-                        val chatMessage = dc.document.toObject(ChatMessage::class.java);
+                        val chatMessage = dc.document.toObject(ChatMessage::class.java)
 
                         if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
                             val currentUser = ChatActivity.currentUser
@@ -115,5 +115,15 @@ class ChatLogActivity : AppCompatActivity() {
             .addOnSuccessListener {
                 Log.d(TAG,"saved to message")
             }
+
+        val lastestMessages = db.collection("latest-messages").document("/$fromId")
+        lastestMessages.set(ChatMessage(db.collection("latest-messages")
+            .document("/$fromId/$toId/$messageId").id, text,
+            fromId, toId!!, System.currentTimeMillis()/1000))
+
+        val lastestMessagesTo = db.collection("latest-messages").document("/$toId")
+        lastestMessagesTo.set(ChatMessage(db.collection("latest-messages")
+            .document("/$toId/$fromId/$messageId").id, text,
+            fromId, toId!!, System.currentTimeMillis()/1000))
     }
 }
