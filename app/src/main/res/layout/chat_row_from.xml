@@ -11,21 +11,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="15dp"
         android:background="@drawable/text_message_from"
         android:maxWidth="240dp"
         android:padding="16dp"
         android:text="This is the message I send"
         android:textColor="@android:color/white"
         android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/imageView"
+        app:layout_constraintEnd_toStartOf="@+id/iv_chat_from_row"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_chat_from_row"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginEnd="10dp"
+        app:civ_border_color="@android:color/white"
+        app:civ_border_width="1dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_from_row"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_from_row"

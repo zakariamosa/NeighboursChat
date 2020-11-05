@@ -21,6 +21,7 @@ class ChatLogActivity : AppCompatActivity() {
     companion object {
         val TAG = "ChatLog"
     }
+    var toUser: User? = null
     val adapter = GroupAdapter <ViewHolder>()
     private lateinit var rcvChatLog: RecyclerView
     private var listener: ListenerRegistration? = null
@@ -29,8 +30,8 @@ class ChatLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
 
-        val user = intent.getParcelableExtra<User>("username")
-        supportActionBar?.title = user?.userName
+        toUser = intent.getParcelableExtra<User>("username")
+        supportActionBar?.title = toUser?.userName
         rcvChatLog = findViewById(R.id.recycler_view_chat_log)
         val btnSendChatLog: Button = findViewById(R.id.btn_send_chat_log)
 
@@ -53,6 +54,7 @@ class ChatLogActivity : AppCompatActivity() {
     private fun listenForMessages() {
         val db = FirebaseFirestore.getInstance()
         val query = db.collection("/messages").orderBy("timeStamp")
+
         listener = query.addSnapshotListener { snapshots, e ->
                 if (e != null) {
                     Log.w(TAG, "listen:error", e)
@@ -67,7 +69,8 @@ class ChatLogActivity : AppCompatActivity() {
                             Log.d(TAG, chatMessage.text)
                         }
                         else {
-                            adapter.add(ChatItemTo(chatMessage.text))
+
+                            adapter.add(ChatItemTo(chatMessage.text, toUser!!))
                         }
                     }
                     else if (dc.type == DocumentChange.Type.MODIFIED) {
@@ -100,15 +103,5 @@ class ChatLogActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     Log.d(TAG, "saved our message")
                 }
-    }
-
-    private fun setupDummyData() {
-        val adapter = GroupAdapter <ViewHolder>()
-
-        adapter.add(ChatItemFrom("Hej hej hej"))
-        adapter.add(ChatItemTo("From message\n From message \n From message"))
-
-
-        rcvChatLog.adapter = adapter
     }
 }
