@@ -42,6 +42,7 @@
         android:layout_marginBottom="16dp"
         android:background="#B4E6F5"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:stackFromEnd="true"
         app:layout_constraintBottom_toTopOf="@+id/et_chat_log"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

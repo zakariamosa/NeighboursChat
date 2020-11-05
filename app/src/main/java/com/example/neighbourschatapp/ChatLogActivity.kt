@@ -105,6 +105,7 @@ class ChatLogActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     Log.d(TAG, "saved our message")
                     etChatLog.text.clear()
+                    rcvChatLog.scrollToPosition(adapter.itemCount -1)
                 }
 
         val chatMessageTo = ChatMessage(db.collection("user-messages")
