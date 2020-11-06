@@ -56,6 +56,7 @@ class ChatLogActivity : AppCompatActivity() {
         val query = db.collection("/user-messages/$fromId/$toId").orderBy("timeStamp")
 
         listener = query.addSnapshotListener { snapshots, e ->
+
                 if (e != null) {
                     //Log.w(TAG, "listen:error", e)
                     return@addSnapshotListener

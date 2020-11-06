@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -30,7 +31,14 @@ class ChatActivity : AppCompatActivity() {
         setContentView(R.layout.activity_chat)
 
         val rcvLatestChat: RecyclerView = findViewById(R.id.recycler_view_latest_chat)
+        rcvLatestChat.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         rcvLatestChat.adapter = adapter
+        adapter.setOnItemClickListener { item, view ->
+            val intent = Intent(this, ChatLogActivity::class.java)
+            val row = item as LatestMessageChatRow
+            intent.putExtra("username", row.chatPartnerUser)
+            startActivity(intent)
+        }
 
         fetchCurrentUser()
         listenForLatestMessages()
