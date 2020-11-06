@@ -18,17 +18,15 @@ import java.util.*
 
 class ChatLogActivity : AppCompatActivity() {
 
-    companion object {
-        val TAG = "ChatLog"
-    }
-    var toUser: User? = null
     val adapter = GroupAdapter <ViewHolder>()
     private lateinit var rcvChatLog: RecyclerView
     private var listener: ListenerRegistration? = null
+    private var toUser: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
+
 
         toUser = intent.getParcelableExtra<User>("username")
         supportActionBar?.title = toUser?.userName
@@ -59,7 +57,7 @@ class ChatLogActivity : AppCompatActivity() {
 
         listener = query.addSnapshotListener { snapshots, e ->
                 if (e != null) {
-                    Log.w(TAG, "listen:error", e)
+                    //Log.w(TAG, "listen:error", e)
                     return@addSnapshotListener
                 }
                 for (dc in snapshots!!.documentChanges) {
@@ -69,17 +67,19 @@ class ChatLogActivity : AppCompatActivity() {
                         if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
                             val currentUser = ChatActivity.currentUser
                             adapter.add(ChatItemFrom(chatMessage.text, currentUser!!))
+                            rcvChatLog.scrollToPosition(adapter.itemCount -1)
                         }
                         else {
 
                             adapter.add(ChatItemTo(chatMessage.text, toUser!!))
+                            rcvChatLog.scrollToPosition(adapter.itemCount -1)
                         }
                     }
                     else if (dc.type == DocumentChange.Type.MODIFIED) {
-                        Log.d(TAG, "Modified")
+                        //Log.d(TAG, "Modified")
                     }
                     else if (dc.type == DocumentChange.Type.REMOVED) {
-                        Log.d(TAG, "Removed")
+                        //Log.d(TAG, "Removed")
                     }
                 }
             }
@@ -100,10 +100,9 @@ class ChatLogActivity : AppCompatActivity() {
         val chatMessageFrom = ChatMessage(db.collection("user-messages")
             .document("/$fromId/$toId/$messageId").id, text,
             fromId, toId!!, System.currentTimeMillis()/1000)
-
-                db.collection("user-messages").document("/$fromId/$toId/$messageId").set(chatMessageFrom)
+            db.collection("user-messages").document("/$fromId/$toId/$messageId").set(chatMessageFrom)
                 .addOnSuccessListener {
-                    Log.d(TAG, "saved our message")
+                    //Log.d(TAG, "saved our message")
                     etChatLog.text.clear()
                     rcvChatLog.scrollToPosition(adapter.itemCount -1)
                 }
@@ -113,17 +112,29 @@ class ChatLogActivity : AppCompatActivity() {
         fromId, toId!!, System.currentTimeMillis()/1000)
         db.collection("user-messages").document("/$toId/$fromId/$messageId").set(chatMessageTo)
             .addOnSuccessListener {
-                Log.d(TAG,"saved to message")
+                //Log.d(TAG,"saved to message")
             }
 
-        val lastestMessages = db.collection("latest-messages").document("/$fromId")
-        lastestMessages.set(ChatMessage(db.collection("latest-messages")
-            .document("/$fromId/$toId/$messageId").id, text,
-            fromId, toId!!, System.currentTimeMillis()/1000))
+        val latestMessageRef = FirebaseDatabase.getInstance().getReference("latest-messages/$fromId/$toId")
+        latestMessageRef.setValue(chatMessageFrom)
 
-        val lastestMessagesTo = db.collection("latest-messages").document("/$toId")
-        lastestMessagesTo.set(ChatMessage(db.collection("latest-messages")
-            .document("/$toId/$fromId/$messageId").id, text,
-            fromId, toId!!, System.currentTimeMillis()/1000))
-    }
+        val latestMessageToRef = FirebaseDatabase.getInstance().getReference("latest-messages/$toId/$fromId")
+        latestMessageToRef.setValue(chatMessageFrom)
+
+/*
+        db.collection("latest-messages").document("/$fromId").set(chatMessageFrom)
+            .addOnSuccessListener {
+                //Log.d(TAG, "saved our message")
+                etChatLog.text.clear()
+                rcvChatLog.scrollToPosition(adapter.itemCount -1)
+            }
+
+        db.collection("latest-messages").document("/$toId").set(chatMessageFrom)
+            .addOnSuccessListener {
+                //Log.d(TAG,"saved to message")
+            }
+
+ */
+
+   }
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="120dp">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_latest_message"
         android:layout_width="64dp"
         android:layout_height="64dp"
