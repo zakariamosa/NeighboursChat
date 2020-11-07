@@ -36,8 +36,28 @@
         android:layout_marginStart="16dp"
         android:text="Latest message"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/tv_date_latest_message"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/iv_latest_message"
         app:layout_constraintTop_toBottomOf="@+id/tv_username_latest_message" />
+
+    <TextView
+        android:id="@+id/tv_date_latest_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="Monday"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_username_latest_message"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_username_latest_message" />
+
+    <ImageView
+        android:id="@+id/iv_latest_message_read"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_date_latest_message"
+        app:layout_constraintStart_toStartOf="@+id/tv_date_latest_message"
+        app:layout_constraintTop_toBottomOf="@+id/tv_date_latest_message"
+        app:srcCompat="@drawable/rounded_button_register_login" />
 </androidx.constraintlayout.widget.ConstraintLayout>

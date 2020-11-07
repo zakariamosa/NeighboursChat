@@ -32,10 +32,8 @@ class ChatLogActivity : AppCompatActivity() {
         supportActionBar?.title = toUser?.userName
         rcvChatLog = findViewById(R.id.recycler_view_chat_log)
         val btnSendChatLog: Button = findViewById(R.id.btn_send_chat_log)
-
         rcvChatLog.adapter = adapter
 
-        //setupDummyData()
         listenForMessages()
 
         btnSendChatLog.setOnClickListener {
@@ -100,7 +98,7 @@ class ChatLogActivity : AppCompatActivity() {
 
         val chatMessageFrom = ChatMessage(db.collection("user-messages")
             .document("/$fromId/$toId/$messageId").id, text,
-            fromId, toId!!, System.currentTimeMillis()/1000)
+            fromId, toId!!, System.currentTimeMillis(), false)
             db.collection("user-messages").document("/$fromId/$toId/$messageId").set(chatMessageFrom)
                 .addOnSuccessListener {
                     //Log.d(TAG, "saved our message")
@@ -110,7 +108,7 @@ class ChatLogActivity : AppCompatActivity() {
 
         val chatMessageTo = ChatMessage(db.collection("user-messages")
             .document("/$toId/$fromId/$messageId").id, text,
-        fromId, toId!!, System.currentTimeMillis()/1000)
+        fromId, toId!!, System.currentTimeMillis(), false)
         db.collection("user-messages").document("/$toId/$fromId/$messageId").set(chatMessageTo)
             .addOnSuccessListener {
                 //Log.d(TAG,"saved to message")

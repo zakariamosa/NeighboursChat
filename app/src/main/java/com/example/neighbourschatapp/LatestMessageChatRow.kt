@@ -2,6 +2,7 @@ package com.example.neighbourschatapp
 
 import android.net.nsd.NsdManager
 import android.util.Log
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -17,6 +18,8 @@ import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.chat_row_from.view.*
 import kotlinx.android.synthetic.main.latest_message_row.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class LatestMessageChatRow(val chatMessage: ChatMessage): Item<ViewHolder>() {
     override fun getLayout(): Int {
@@ -26,6 +29,8 @@ class LatestMessageChatRow(val chatMessage: ChatMessage): Item<ViewHolder>() {
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.tv_chat_latest_message.text = chatMessage.text
+        viewHolder.itemView.tv_date_latest_message.text = convertLongToTime(chatMessage.timeStamp)
+
 
         val chatPartnerId: String
         if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
@@ -60,6 +65,11 @@ class LatestMessageChatRow(val chatMessage: ChatMessage): Item<ViewHolder>() {
 
             }
         }
+    fun convertLongToTime(time: Long): String {
+        val date = Date(time)
+        val format = SimpleDateFormat("MM/dd HH:mm", Locale.UK)
+        return format.format(date)
+    }
 }
 
 
