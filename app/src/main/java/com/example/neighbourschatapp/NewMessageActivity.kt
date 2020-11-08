@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Looper
 import android.os.PersistableBundle
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.*
@@ -26,6 +27,7 @@ class NewMessageActivity : AppCompatActivity() {
     private var currentuserlat:Double=0.0
     private var currentuserlong:Double=0.0
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_message)
@@ -36,8 +38,9 @@ class NewMessageActivity : AppCompatActivity() {
         val adapter = GroupAdapter <ViewHolder>()
         rcvUsers.adapter = adapter
 
-        locationProvider = LocationServices.getFusedLocationProviderClient(this)
 
+        //currentUserSettings=loadUserSettings()
+        locationProvider = LocationServices.getFusedLocationProviderClient(this)
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
 
@@ -59,6 +62,7 @@ class NewMessageActivity : AppCompatActivity() {
                     Log.d("!!!", "last location lat: $currentuserlat, lng: $currentuserlong")
                     fetchUsers()
                     //will save this in user table
+
                 }
             }
         }
@@ -80,10 +84,18 @@ class NewMessageActivity : AppCompatActivity() {
                     val user = document.toObject(User::class.java)
                     if (user != null && currentUser?.uid != user.userId) {
                         Log.d("!!!!", "$currentuserlat and $currentuserlong")
-                        if (isneighbours(user)){
-                            adapter.add(UserItem(user))
+                        val itemRef = db.collection("Settings").document(currentUser!!.uid).get()
+                        itemRef.addOnCompleteListener(){
+                            if (it.isSuccessful){
+                                val distancefrommeinkm=distance(currentuserlat,currentuserlong,user.lastLocationLat,user.lastLocationLong)
+                                //Toast.makeText(this,distancefrommeinkm.toString() , Toast.LENGTH_SHORT).show()
+                                if (distancefrommeinkm<it.result.data?.get("locationDistance").toString().toDouble()){
+                                    //Toast.makeText(this,it.result.data?.get("locationDistance").toString() , Toast.LENGTH_SHORT).show()
+                                    adapter.add(UserItem(user))
+                                }
+
+                            }
                         }
-                        //adapter.add(UserItem(user))
                     }
             }
         }
@@ -160,14 +172,5 @@ class NewMessageActivity : AppCompatActivity() {
 
     private fun rad2deg(rad: Double): Double {
         return rad * 180.0 / Math.PI
-    }
-
-    private fun isneighbours(usr:User):Boolean{
-
-        val distancefrommeinkm=distance(currentuserlat,currentuserlong,usr.lastLocationLat,usr.lastLocationLong)
-        if (distancefrommeinkm<5){
-            return true
-        }
-        return false
     }
 }
