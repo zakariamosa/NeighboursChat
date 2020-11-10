@@ -16,6 +16,11 @@
     <string name="sign_out">Sign out</string>
     <string name="enter_message">Enter message</string>
     <string name="send">Send</string>
+
+   
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="blank_space"> </string>
     <string name="image_new_message">Blue dot for new message</string>
+
 </resources>

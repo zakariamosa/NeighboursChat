@@ -2,13 +2,13 @@ package com.example.neighbourschatapp
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
-import android.os.PersistableBundle
 import android.util.Log
-import android.widget.Toast
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.*
@@ -17,7 +17,20 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 
-class NewMessageActivity : AppCompatActivity() {
+// TODO: Rename parameter arguments, choose names that match
+// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+private const val ARG_PARAM1 = "param1"
+private const val ARG_PARAM2 = "param2"
+
+/**
+ * A simple [Fragment] subclass.
+ * Use the [fragment_block_user.newInstance] factory method to
+ * create an instance of this fragment.
+ */
+class fragment_block_user : Fragment() {
+    // TODO: Rename and change types of parameters
+    private var param1: String? = null
+    private var param2: String? = null
 
     lateinit var rcvUsers: RecyclerView
     private val REQUEST_LOCATION = 1
@@ -27,20 +40,26 @@ class NewMessageActivity : AppCompatActivity() {
     private var currentuserlat:Double=0.0
     private var currentuserlong:Double=0.0
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_new_message)
+        arguments?.let {
+            param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
+        }
+    }
 
-        supportActionBar?.title = "Start a new chat-conversation"
-
-        rcvUsers = findViewById(R.id.recycler_view_users)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val myview=inflater.inflate(R.layout.fragment_block_user, container, false)
+        rcvUsers = myview.findViewById(R.id.recycler_view_block_users)
         val adapter = GroupAdapter <ViewHolder>()
         rcvUsers.adapter = adapter
 
 
         //currentUserSettings=loadUserSettings()
-        locationProvider = LocationServices.getFusedLocationProviderClient(this)
+        locationProvider = LocationServices.getFusedLocationProviderClient(this@fragment_block_user.context!!)
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
 
@@ -49,11 +68,11 @@ class NewMessageActivity : AppCompatActivity() {
                 }
             }
         }
-        if( ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
-                PackageManager.PERMISSION_GRANTED) {
+        if( ActivityCompat.checkSelfPermission(this@fragment_block_user.context!!, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+            PackageManager.PERMISSION_GRANTED) {
             Log.d("!!!", "no permission")
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                    REQUEST_LOCATION)
+            ActivityCompat.requestPermissions(this@fragment_block_user.activity!!, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                REQUEST_LOCATION)
         } else {
             locationProvider.lastLocation.addOnSuccessListener { location ->
                 if (location != null) {
@@ -67,8 +86,9 @@ class NewMessageActivity : AppCompatActivity() {
             }
         }
         locationRequest = creatLocationRequest()
+        return myview
     }
-    //Denna funktion laddar alla registrerade användare i en recyclerview i realtid, men laddar listan två gånger
+
     private fun fetchUsers() {
 
         val db = FirebaseFirestore.getInstance()
@@ -91,26 +111,26 @@ class NewMessageActivity : AppCompatActivity() {
                                 //Toast.makeText(this,distancefrommeinkm.toString() , Toast.LENGTH_SHORT).show()
                                 if (distancefrommeinkm<it.result.data?.get("locationDistance").toString().toDouble()){
                                     //Toast.makeText(this,it.result.data?.get("locationDistance").toString() , Toast.LENGTH_SHORT).show()
-                                    adapter.add(UserItem(user))
+                                    //adapter.add(UserItem(user))
+                                    adapter.add(BlockUserItem(user))
                                 }
 
                             }
                         }
                     }
+                }
             }
-        }
             adapter.setOnItemClickListener { item, view ->
                 val userItem = item as UserItem
                 val intent = Intent(view.context, ChatLogActivity::class.java)
                 intent.putExtra("username", userItem.user)
                 startActivity(intent)
-                finish()
+                this@fragment_block_user.activity!!.finish()
 
             }
             rcvUsers.adapter = adapter
         }
     }
-
     override fun onResume() {
         super.onResume()
 
@@ -124,8 +144,8 @@ class NewMessageActivity : AppCompatActivity() {
     }
 
     fun startLocationUpdates() {
-        if( ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
-                PackageManager.PERMISSION_GRANTED) {
+        if( ActivityCompat.checkSelfPermission(this@fragment_block_user.context!!, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+            PackageManager.PERMISSION_GRANTED) {
             locationProvider.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         }
     }
@@ -135,11 +155,11 @@ class NewMessageActivity : AppCompatActivity() {
     }
 
     fun creatLocationRequest()  =
-            LocationRequest.create().apply{
-                interval = 2000
-                fastestInterval = 1000
-                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            }
+        LocationRequest.create().apply{
+            interval = 2000
+            fastestInterval = 1000
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if(requestCode == REQUEST_LOCATION ) {
@@ -172,5 +192,25 @@ class NewMessageActivity : AppCompatActivity() {
 
     private fun rad2deg(rad: Double): Double {
         return rad * 180.0 / Math.PI
+    }
+
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment fragment_block_user.
+         */
+        // TODO: Rename and change types and number of parameters
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            fragment_block_user().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
     }
 }
