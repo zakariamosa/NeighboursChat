@@ -51,6 +51,11 @@ class ChatActivity : AppCompatActivity() {
             toId = row.chatPartnerUser!!.userId
             intent.putExtra("username", row.chatPartnerUser)
             startActivity(intent)
+            /*
+            Om jag ändrar read till true direkt på klick så reagerar recycler view:n på det direkt och det blir en
+            "glitch" i designen. Därför har jag satt ett delay på en halv sekund så att intent hinner genomföras
+            innan värdet ändras i databasen.
+             */
             object : CountDownTimer (500,1000){
                 override fun onFinish() {
                     FirebaseDatabase.getInstance().getReference("latest-messages/$fromId/$toId/read").setValue(true)

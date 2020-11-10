@@ -65,12 +65,12 @@ class ChatLogActivity : AppCompatActivity() {
 
                         if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
                             val currentUser = ChatActivity.currentUser
-                            adapter.add(ChatItemFrom(chatMessage.text, currentUser!!))
+                            adapter.add(ChatItemFrom(chatMessage, currentUser!!))
                             rcvChatLog.scrollToPosition(adapter.itemCount -1)
                         }
                         else {
 
-                            adapter.add(ChatItemTo(chatMessage.text, toUser!!))
+                            adapter.add(ChatItemTo(chatMessage, toUser!!))
                             rcvChatLog.scrollToPosition(adapter.itemCount -1)
                         }
                     }

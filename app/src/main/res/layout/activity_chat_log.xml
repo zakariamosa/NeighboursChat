@@ -25,12 +25,15 @@
         android:id="@+id/et_chat_log"
         android:layout_width="0dp"
         android:layout_height="50dp"
+        android:layout_marginEnd="5dp"
         android:layout_marginBottom="10dp"
         android:background="@android:color/white"
         android:ems="10"
         android:hint="@string/enter_message"
+        android:autofillHints="@string/enter_message"
         android:inputType="textPersonName"
         android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_send_chat_log"
         app:layout_constraintStart_toStartOf="parent" />
@@ -39,12 +42,12 @@
         android:id="@+id/recycler_view_chat_log"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="10dp"
         android:background="#B4E6F5"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:stackFromEnd="true"
         app:layout_constraintBottom_toTopOf="@+id/et_chat_log"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:stackFromEnd="true" />
 </androidx.constraintlayout.widget.ConstraintLayout>
