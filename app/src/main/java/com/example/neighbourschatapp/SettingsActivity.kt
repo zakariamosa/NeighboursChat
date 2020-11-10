@@ -35,8 +35,22 @@ class SettingsActivity : AppCompatActivity() {
             callNeighbourDistanceSetting()
         }
 
+        val buttonBlockList=findViewById<Button>(R.id.buttonBlock)
+        buttonBlockList.setOnClickListener(){
+            callUserBlockListSetting()
+        }
+
 
         supportActionBar?.title = "Settings"
+    }
+
+    private fun callUserBlockListSetting() {
+        val blockListSettingFragment =  fragment_block_user.newInstance("","")
+
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.container, blockListSettingFragment, "blockuserlist" )
+
+        transaction.commit()
     }
 
     private fun callNeighbourDistanceSetting() {
@@ -44,7 +58,7 @@ class SettingsActivity : AppCompatActivity() {
         val neighbourDistanceSettingFragment =  fragment_neighbourdistance.newInstance("","")
 
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(R.id.container, neighbourDistanceSettingFragment, "neighbourdistance" )
+        transaction.replace(R.id.container, neighbourDistanceSettingFragment, "neighbourdistance" )
 
         transaction.commit()
     }
