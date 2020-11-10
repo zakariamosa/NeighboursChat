@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="104dp"
-        android:text="Username"
+        android:text="@string/blank_space"
         android:textStyle="bold"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toTopOf="@+id/tv_chat_latest_message"
@@ -34,7 +34,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Latest message"
+        android:text="@string/blank_space"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tv_date_latest_message"
         app:layout_constraintHorizontal_bias="0.5"
@@ -46,18 +46,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        android:text="Monday"
+        android:text="@string/blank_space"
         app:layout_constraintBottom_toBottomOf="@+id/tv_username_latest_message"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_username_latest_message" />
 
     <ImageView
         android:id="@+id/iv_latest_message_read"
+        android:contentDescription="@string/image_new_message"
         android:layout_width="13dp"
         android:layout_height="13dp"
         android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="@+id/tv_date_latest_message"
         app:layout_constraintStart_toStartOf="@+id/tv_date_latest_message"
         app:layout_constraintTop_toBottomOf="@+id/tv_date_latest_message"
-        app:srcCompat="@drawable/rounded_button_register_login" />
+        app:srcCompat="@drawable/new_message" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -75,10 +75,10 @@ class ChatLogActivity : AppCompatActivity() {
                         }
                     }
                     else if (dc.type == DocumentChange.Type.MODIFIED) {
-                        //Log.d(TAG, "Modified")
+                        Log.d("!!!", "Modified")
                     }
                     else if (dc.type == DocumentChange.Type.REMOVED) {
-                        //Log.d(TAG, "Removed")
+                        Log.d("!!!", "Removed")
                     }
                 }
             }
@@ -108,32 +108,20 @@ class ChatLogActivity : AppCompatActivity() {
 
         val chatMessageTo = ChatMessage(db.collection("user-messages")
             .document("/$toId/$fromId/$messageId").id, text,
-        fromId, toId!!, System.currentTimeMillis(), false)
+        fromId, toId, System.currentTimeMillis(), false)
         db.collection("user-messages").document("/$toId/$fromId/$messageId").set(chatMessageTo)
             .addOnSuccessListener {
                 //Log.d(TAG,"saved to message")
             }
+        val chatMessageFromTrue = ChatMessage(db.collection("user-messages")
+            .document("/$fromId/$toId/$messageId").id, text,
+            fromId, toId, System.currentTimeMillis(), true)
 
         val latestMessageRef = FirebaseDatabase.getInstance().getReference("latest-messages/$fromId/$toId")
-        latestMessageRef.setValue(chatMessageFrom)
+        latestMessageRef.setValue(chatMessageFromTrue)
 
         val latestMessageToRef = FirebaseDatabase.getInstance().getReference("latest-messages/$toId/$fromId")
         latestMessageToRef.setValue(chatMessageFrom)
-
-/*
-        db.collection("latest-messages").document("/$fromId").set(chatMessageFrom)
-            .addOnSuccessListener {
-                //Log.d(TAG, "saved our message")
-                etChatLog.text.clear()
-                rcvChatLog.scrollToPosition(adapter.itemCount -1)
-            }
-
-        db.collection("latest-messages").document("/$toId").set(chatMessageFrom)
-            .addOnSuccessListener {
-                //Log.d(TAG,"saved to message")
-            }
-
- */
 
    }
 }

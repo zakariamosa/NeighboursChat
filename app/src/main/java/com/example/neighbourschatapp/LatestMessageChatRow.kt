@@ -3,6 +3,7 @@ package com.example.neighbourschatapp
 import android.net.nsd.NsdManager
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -27,9 +28,17 @@ class LatestMessageChatRow(val chatMessage: ChatMessage): Item<ViewHolder>() {
     }
     var chatPartnerUser: User? = null
 
+
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.tv_chat_latest_message.text = chatMessage.text
         viewHolder.itemView.tv_date_latest_message.text = convertLongToTime(chatMessage.timeStamp)
+        if (chatMessage.read == true) {
+            viewHolder.itemView.iv_latest_message_read.visibility = View.GONE
+        }
+        else if (chatMessage.read == false) {
+            viewHolder.itemView.iv_latest_message_read.visibility = View.VISIBLE
+        }
+
 
 
         val chatPartnerId: String

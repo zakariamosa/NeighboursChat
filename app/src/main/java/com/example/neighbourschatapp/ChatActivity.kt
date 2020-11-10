@@ -2,6 +2,7 @@ package com.example.neighbourschatapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.provider.ContactsContract
 import android.provider.DocumentsContract
 import android.util.Log
@@ -33,6 +34,8 @@ class ChatActivity : AppCompatActivity() {
     val latestMessagesMap = HashMap <String, ChatMessage>()
     var chatMessage = ChatMessage()
     val adapter = GroupAdapter <ViewHolder>()
+    var fromId: String? = null
+    var toId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,8 +47,17 @@ class ChatActivity : AppCompatActivity() {
         adapter.setOnItemClickListener { item, view ->
             val intent = Intent(this, ChatLogActivity::class.java)
             val row = item as LatestMessageChatRow
+            fromId = FirebaseAuth.getInstance().uid
+            toId = row.chatPartnerUser!!.userId
             intent.putExtra("username", row.chatPartnerUser)
             startActivity(intent)
+            object : CountDownTimer (500,1000){
+                override fun onFinish() {
+                    FirebaseDatabase.getInstance().getReference("latest-messages/$fromId/$toId/read").setValue(true)
+                }
+                override fun onTick(millisUntilFinished: Long) {}
+            }.start()
+
         }
 
         fetchCurrentUser()
@@ -90,22 +102,6 @@ class ChatActivity : AppCompatActivity() {
             override fun onCancelled(error: DatabaseError) {}
         })
 
-        /*
-        val fromId = FirebaseAuth.getInstance().uid
-        val db = FirebaseFirestore.getInstance()
-        val query = db.collection("/latest-messages").document("/$fromId")
-            .addSnapshotListener {snapshot, e ->
-               if (snapshot != null) {
-                val chatMessage = snapshot.toObject(ChatMessage::class.java) ?: return@addSnapshotListener
-                latestMessagesMap[chatMessage.toId] = chatMessage
-                   adapter.clear()
-                   latestMessagesMap?.values?.forEach {
-                       adapter.add(LatestMessageChatRow(it))
-                   }
-                }
-            }
-
-         */
     }
 
     private fun fetchCurrentUser() {
