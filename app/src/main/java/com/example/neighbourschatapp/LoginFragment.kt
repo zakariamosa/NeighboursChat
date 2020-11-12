@@ -101,6 +101,7 @@ class LoginFragment: Fragment() {
 
                 Log.d("Main", "user succefully logged in with uid ${it.result?.user?.uid}")
                 updateuserlocation(it.result?.user?.uid)
+                fillBlockList()
                 val intent = Intent(this@LoginFragment.context, ChatActivity::class.java)
                 //Denna rad rensar upp i tidigare aktiviteter
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -111,6 +112,25 @@ class LoginFragment: Fragment() {
                 Log.d("Main", "Failed to login user: ${it.message}")
 
             }
+    }
+
+    private fun fillBlockList() {
+        val db = FirebaseFirestore.getInstance()
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        blocklista.clear()
+        val itemRef =db.collection("BlockList").document(currentUser!!.uid).collection("UserBlockedList")
+        itemRef.addSnapshotListener(){snapshot,e->
+            if (snapshot!=null){
+                for (document in snapshot.documents){
+                    val settingblockuser =document.toObject(User::class.java)
+                    if (settingblockuser!=null){
+                        blocklista.add(settingblockuser)
+                    }
+                }
+
+            }
+
+        }
     }
 
     private fun updateuserlocation(uid: String?) {

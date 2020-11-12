@@ -121,11 +121,12 @@ class fragment_block_user : Fragment() {
                 }
             }
             adapter.setOnItemClickListener { item, view ->
-                val userItem = item as UserItem
+                /*val userItem = item as UserItem
                 val intent = Intent(view.context, ChatLogActivity::class.java)
                 intent.putExtra("username", userItem.user)
                 startActivity(intent)
-                this@fragment_block_user.activity!!.finish()
+                this@fragment_block_user.activity!!.finish()*/
+
 
             }
             rcvUsers.adapter = adapter
