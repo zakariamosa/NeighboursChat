@@ -117,7 +117,7 @@ class LoginFragment: Fragment() {
     private fun fillBlockList() {
         val db = FirebaseFirestore.getInstance()
         val currentUser = FirebaseAuth.getInstance().currentUser
-
+        blocklista.clear()
         val itemRef =db.collection("BlockList").document(currentUser!!.uid).collection("UserBlockedList")
         itemRef.addSnapshotListener(){snapshot,e->
             if (snapshot!=null){
