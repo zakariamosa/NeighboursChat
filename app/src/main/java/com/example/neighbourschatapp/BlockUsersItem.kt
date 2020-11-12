@@ -36,17 +36,25 @@ class BlockUserItem(val user: User) : Item<ViewHolder>() {
                     blocklista.add(user)
                     val blkuser=BlockList(blocklista)
 
-                    db.collection("BlockList").document(userId).set(blkuser)
+                    db.collection("BlockList").document(userId).collection("UserBlockedList").add(user)//.set(blkuser)
                             .addOnSuccessListener {
 
                                 Toast.makeText(viewHolder.itemView.context, "you just blocked ${user.userName} he/she will not be able to chat with you!", Toast.LENGTH_SHORT).show()
                             }
                 }
                 false->{
-                    db.collection("BlockList").document("").delete()
+                    db.collection("BlockList").document(userId).collection("UserBlockedList").whereEqualTo("userId",user.userId)
+                            .get()
                             .addOnSuccessListener {
-
-                                Toast.makeText(viewHolder.itemView.context, "you just unblocked ${user.userName} he/she will be able to chat with you!", Toast.LENGTH_SHORT).show()
+                                for (document in it.documents){
+                                    val documentidforblockeduser=document.toObject(User::class.java)
+                                    db.collection("BlockList").document(userId).collection("UserBlockedList").document(document.id).delete().addOnCompleteListener(){
+                                        if (it.isSuccessful){
+                                            blocklista.removeAll { u->u.userId==user.userId }
+                                            Toast.makeText(viewHolder.itemView.context, "you just unblocked ${user.userName} he/she will be able to chat with you!", Toast.LENGTH_SHORT).show()
+                                        }
+                                    }
+                                }
                             }
                 }//Log.d("BlockUserItem","${user.userEmail} + selected: $select +position: $position")
             }
@@ -64,17 +72,15 @@ class BlockUserItem(val user: User) : Item<ViewHolder>() {
     }
 
     private fun isuserblocked(blocklista: MutableList<User>, user: User): Boolean {
-        var per1id=user.userId
-        var pers= mutableListOf<User>()
-        pers=blocklista
-
-        for (i in 0..pers.size-1){
-            val per2=pers[i] as User
-            val per2id=per2.userId
-            if (per1id==per2id){
-                return true
+        if (blocklista.size>0){
+            for (i in 0..blocklista.size-1){
+                if (blocklista[i].userId==user.userId){
+                    return true
+                }
             }
+
         }
+
         return false
     }
 

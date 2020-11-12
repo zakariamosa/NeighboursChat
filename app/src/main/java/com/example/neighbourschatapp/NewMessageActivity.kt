@@ -91,7 +91,28 @@ class NewMessageActivity : AppCompatActivity() {
                                 //Toast.makeText(this,distancefrommeinkm.toString() , Toast.LENGTH_SHORT).show()
                                 if (distancefrommeinkm<it.result.data?.get("locationDistance").toString().toDouble()){
                                     //Toast.makeText(this,it.result.data?.get("locationDistance").toString() , Toast.LENGTH_SHORT).show()
-                                    adapter.add(UserItem(user))
+                                    var showuser:Boolean=true
+                                    db.collection("BlockList").document(currentUser.uid).collection("UserBlockedList").whereEqualTo("userId",user.userId)
+                                            .get()
+                                            .addOnSuccessListener {
+                                                for (document in it.documents){
+                                                    //do not show user when I block this user
+                                                    showuser=false
+                                                }
+                                                db.collection("BlockList").document(user.userId).collection("UserBlockedList").whereEqualTo("userId",currentUser.uid)
+                                                        .get()
+                                                        .addOnSuccessListener {
+                                                            for (document in it.documents){
+                                                                //do not show user when He/She blocked Me
+                                                                showuser=false
+
+                                                            }
+                                                            if (showuser){
+                                                                adapter.add(UserItem(user))
+                                                            }
+                                                        }
+                                            }
+
                                 }
 
                             }

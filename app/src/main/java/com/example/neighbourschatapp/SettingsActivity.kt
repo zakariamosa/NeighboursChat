@@ -37,21 +37,9 @@ class SettingsActivity : AppCompatActivity() {
 
         val buttonBlockList=findViewById<Button>(R.id.buttonBlock)
         buttonBlockList.setOnClickListener(){
-            val db = FirebaseFirestore.getInstance()
-            val currentUser = FirebaseAuth.getInstance().currentUser
-            val itemRef =db.collection("BlockList").document(currentUser!!.uid).get()
-            itemRef.addOnCompleteListener(){
-                if (it.isSuccessful){
-                    val blokdusr=it.result.data?.getValue("blockedUsers")
-                    val blist=blokdusr as List<User>
-                    if (blist.size>0){
-                        blocklista=blist as MutableList<User>
-                    }
 
-                    callUserBlockListSetting()
-                }
-            }
 
+            callUserBlockListSetting()
 
 
         }
