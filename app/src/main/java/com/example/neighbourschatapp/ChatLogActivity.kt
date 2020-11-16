@@ -1,5 +1,6 @@
 package com.example.neighbourschatapp
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,10 +12,18 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.gson.Gson
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.sql.Timestamp
 import java.util.*
+
+const val TOPIC = "/topics/myTopic2"
 
 class ChatLogActivity : AppCompatActivity() {
 
@@ -23,9 +32,20 @@ class ChatLogActivity : AppCompatActivity() {
     private var listener: ListenerRegistration? = null
     private var toUser: User? = null
 
+    val TAG = "MainActivity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
+
+        val db=FirebaseFirestore.getInstance()
+        FirebaseService.sharedPref = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+            FirebaseService.token = it.token
+
+            db.collection("users").document(FirebaseAuth.getInstance().uid!!).update("token",it.token)
+        }
+        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
 
 
         toUser = intent.getParcelableExtra<User>("username")
@@ -39,6 +59,30 @@ class ChatLogActivity : AppCompatActivity() {
         btnSendChatLog.setOnClickListener {
             //Log.d(TAG, "Try to send message....")
             performSendMessage()
+            val title = "my message title"
+            val message = "this is a notification from ${FirebaseAuth.getInstance().uid} to ${toUser!!.userId}"
+            val recipientToken = toUser!!.token
+            if(title.isNotEmpty() && message.isNotEmpty() && recipientToken.isNotEmpty()) {
+                PushNotification(
+                        NotificationData(title, message),
+                        recipientToken
+                ).also {
+                    sendNotification(it)
+                }
+            }
+        }
+    }
+
+    private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val response = RetrofitInstance.api.postNotification(notification)
+            if(response.isSuccessful) {
+                Log.d(TAG, "Response: ${Gson().toJson(response)}")
+            } else {
+                Log.e(TAG, response.errorBody().toString())
+            }
+        } catch(e: Exception) {
+            Log.e(TAG, e.toString())
         }
     }
 
