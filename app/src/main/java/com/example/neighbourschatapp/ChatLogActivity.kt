@@ -38,6 +38,7 @@ class ChatLogActivity : AppCompatActivity() {
     private lateinit var rcvChatLog: RecyclerView
     private var listener: ListenerRegistration? = null
     private var toUser: User? = null
+    private var lastMessage:String=""
 
     val TAG = "ChatLogActivity"
 
@@ -71,8 +72,7 @@ class ChatLogActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     for (document in it.documents){
                         val title = document.toObject(User::class.java)?.userName
-                        val etChatLog: EditText = findViewById(R.id.et_chat_log)
-                        val message = etChatLog.text.toString()
+                        val message = lastMessage
                         val recipientToken = toUser!!.token
                         if(title!!.isNotEmpty() && message.isNotEmpty() && recipientToken.isNotEmpty()) {
                             PushNotification(
@@ -188,6 +188,7 @@ class ChatLogActivity : AppCompatActivity() {
             db.collection("user-messages").document("/$fromId/$toId/$messageId").set(chatMessageFrom)
                 .addOnSuccessListener {
                     //Log.d(TAG, "saved our message")
+                    lastMessage=etChatLog.text.toString()
                     etChatLog.text.clear()
                     rcvChatLog.scrollToPosition(adapter.itemCount -1)
                 }
