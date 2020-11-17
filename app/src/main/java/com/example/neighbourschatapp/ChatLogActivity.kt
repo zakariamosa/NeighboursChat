@@ -1,16 +1,26 @@
 package com.example.neighbourschatapp
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.graphics.BitmapFactory
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessagingService
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import java.sql.Timestamp
@@ -35,12 +45,51 @@ class ChatLogActivity : AppCompatActivity() {
         rcvChatLog.adapter = adapter
 
         listenForMessages()
+        managetoken()
 
         btnSendChatLog.setOnClickListener {
             //Log.d(TAG, "Try to send message....")
             performSendMessage()
         }
     }
+
+    private fun managetoken() {
+        val db=FirebaseFirestore.getInstance()
+        FirebaseService.sharedPref = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+            FirebaseService.token = it.token
+
+            db.collection("users").document(FirebaseAuth.getInstance().uid!!).update("token",it.token)
+        }
+    }
+
+    private fun initChannel(channelId: String, channelName: String) {
+        if (Build.VERSION.SDK_INT < 26) {
+            return
+        }
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
+
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun startTripNotification(notificationTitle:String, notificationtEXT:String,token:String) {
+
+        val NOTIFICATION_CHANNEL_ID=token//"abcdefg123456"
+        val NOTIFICATION_CHANNEL_NAME="developersgroup"
+        initChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME)
+
+        val pendingIntent = PendingIntent.getActivity(this, 0, Intent(), 0)
+        val     notification = NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID)
+                .setContentTitle(notificationTitle)
+                .setContentText(notificationtEXT)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.mipmap.ic_launcher))
+        notification.setContentIntent(pendingIntent)
+        val notificationManager = this?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(0, notification.build())
+    }
+
 
     override fun onStop() {
         super.onStop()
@@ -122,6 +171,8 @@ class ChatLogActivity : AppCompatActivity() {
 
         val latestMessageToRef = FirebaseDatabase.getInstance().getReference("latest-messages/$toId/$fromId")
         latestMessageToRef.setValue(chatMessageFrom)
+
+        startTripNotification(user.userName,text,user.token)
 
    }
 }
