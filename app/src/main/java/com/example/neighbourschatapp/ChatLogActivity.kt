@@ -76,7 +76,7 @@ class ChatLogActivity : AppCompatActivity() {
     private fun startTripNotification(notificationTitle:String, notificationtEXT:String,token:String) {
 
         val NOTIFICATION_CHANNEL_ID=token//"abcdefg123456"
-        val NOTIFICATION_CHANNEL_NAME="developersgroup"
+        val NOTIFICATION_CHANNEL_NAME=token
         initChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME)
 
         val pendingIntent = PendingIntent.getActivity(this, 0, Intent(), 0)
@@ -87,7 +87,7 @@ class ChatLogActivity : AppCompatActivity() {
                 .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.mipmap.ic_launcher))
         notification.setContentIntent(pendingIntent)
         val notificationManager = this?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(0, notification.build())
+        notificationManager.notify(token,0, notification.build())
     }
 
 
@@ -172,7 +172,17 @@ class ChatLogActivity : AppCompatActivity() {
         val latestMessageToRef = FirebaseDatabase.getInstance().getReference("latest-messages/$toId/$fromId")
         latestMessageToRef.setValue(chatMessageFrom)
 
+        /*var cusers= mutableListOf<User>()
+        db.collection("users").whereEqualTo("userId",fromId).get()
+            .addOnSuccessListener {
+                for (document in it.documents){
+                    cusers.add(document.toObject(User::class.java)!!)
+                    startTripNotification(user.userName,text,cusers[0].token)
+                }
+            }*/
         startTripNotification(user.userName,text,user.token)
+
+
 
    }
 }
