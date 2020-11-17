@@ -1,11 +1,18 @@
 package com.example.neighbourschatapp
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
+import android.graphics.BitmapFactory
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -32,7 +39,7 @@ class ChatLogActivity : AppCompatActivity() {
     private var listener: ListenerRegistration? = null
     private var toUser: User? = null
 
-    val TAG = "MainActivity"
+    val TAG = "!!!!!"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +66,7 @@ class ChatLogActivity : AppCompatActivity() {
         btnSendChatLog.setOnClickListener {
             //Log.d(TAG, "Try to send message....")
             performSendMessage()
+            startTripNotification()
             val title = "my message title"
             val message = "this is a notification from ${FirebaseAuth.getInstance().uid} to ${toUser!!.userId}"
             val recipientToken = toUser!!.token
@@ -84,6 +92,33 @@ class ChatLogActivity : AppCompatActivity() {
         } catch(e: Exception) {
             Log.e(TAG, e.toString())
         }
+    }
+
+    private fun initChannel(channelId: String, channelName: String) {
+        if (Build.VERSION.SDK_INT < 26) {
+            return
+        }
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
+
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun startTripNotification() {
+
+        val NOTIFICATION_CHANNEL_ID="abcdefg123456"
+        val NOTIFICATION_CHANNEL_NAME="developersgroup"
+        initChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME)
+
+        val pendingIntent = PendingIntent.getActivity(this, 0, Intent(), 0)
+        val     notification = NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID)
+                .setContentTitle("test notification title")
+                .setContentText("test notification text")
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.mipmap.ic_launcher))
+        notification.setContentIntent(pendingIntent)
+        val notificationManager = this?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(0, notification.build())
     }
 
     override fun onStop() {
