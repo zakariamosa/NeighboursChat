@@ -38,6 +38,7 @@ class ChatLogActivity : AppCompatActivity() {
     private lateinit var rcvChatLog: RecyclerView
     private var listener: ListenerRegistration? = null
     private var toUser: User? = null
+    private var lastMessage:String=""
 
     val TAG = "ChatLogActivity"
 
@@ -67,17 +68,23 @@ class ChatLogActivity : AppCompatActivity() {
             //Log.d(TAG, "Try to send message....")
             performSendMessage()
             //startTripNotification()
-            val title = "my message title"
-            val message = "this is a notification from ${FirebaseAuth.getInstance().uid} to ${toUser!!.userId}"
-            val recipientToken = toUser!!.token
-            if(title.isNotEmpty() && message.isNotEmpty() && recipientToken.isNotEmpty()) {
-                PushNotification(
-                        NotificationData(title, message),
-                        recipientToken
-                ).also {
-                    sendNotification(it)
+            db.collection("users").whereEqualTo("userId",FirebaseAuth.getInstance().uid!!).get()
+                .addOnSuccessListener {
+                    for (document in it.documents){
+                        val title = document.toObject(User::class.java)?.userName
+                        val message = lastMessage
+                        val recipientToken = toUser!!.token
+                        if(title!!.isNotEmpty() && message.isNotEmpty() && recipientToken.isNotEmpty()) {
+                            PushNotification(
+                                NotificationData(title, message),
+                                recipientToken
+                            ).also {
+                                sendNotification(it)
+                            }
+                        }
+                    }
                 }
-            }
+
         }
     }
 
@@ -181,6 +188,7 @@ class ChatLogActivity : AppCompatActivity() {
             db.collection("user-messages").document("/$fromId/$toId/$messageId").set(chatMessageFrom)
                 .addOnSuccessListener {
                     //Log.d(TAG, "saved our message")
+                    lastMessage=etChatLog.text.toString()
                     etChatLog.text.clear()
                     rcvChatLog.scrollToPosition(adapter.itemCount -1)
                 }
