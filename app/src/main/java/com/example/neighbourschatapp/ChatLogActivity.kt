@@ -39,7 +39,7 @@ class ChatLogActivity : AppCompatActivity() {
     private var listener: ListenerRegistration? = null
     private var toUser: User? = null
 
-    val TAG = "!!!!!"
+    val TAG = "ChatLogActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,7 +69,7 @@ class ChatLogActivity : AppCompatActivity() {
             //startTripNotification()
             val title = "my message title"
             val message = "this is a notification from ${FirebaseAuth.getInstance().uid} to ${toUser!!.userId}"
-            val recipientToken = toUser!!.token
+            //val recipientToken = toUser!!.token
             if(title.isNotEmpty() && message.isNotEmpty() /*&& recipientToken.isNotEmpty()*/) {
                 PushNotification(
                         NotificationData(title, message),
