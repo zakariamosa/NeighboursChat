@@ -45,13 +45,13 @@ class ChatLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
 
-        val db=FirebaseFirestore.getInstance()
+        /*val db=FirebaseFirestore.getInstance()
         FirebaseService.sharedPref = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
             FirebaseService.token = it.token
 
             db.collection("users").document(FirebaseAuth.getInstance().uid!!).update("token",it.token)
-        }
+        }*/
         FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
 
 
@@ -70,10 +70,10 @@ class ChatLogActivity : AppCompatActivity() {
             val title = "my message title"
             val message = "this is a notification from ${FirebaseAuth.getInstance().uid} to ${toUser!!.userId}"
             val recipientToken = toUser!!.token
-            if(title.isNotEmpty() && message.isNotEmpty() && recipientToken.isNotEmpty()) {
+            if(title.isNotEmpty() && message.isNotEmpty() /*&& recipientToken.isNotEmpty()*/) {
                 PushNotification(
                         NotificationData(title, message),
-                        recipientToken
+                        TOPIC//recipientToken
                 ).also {
                     sendNotification(it)
                 }
