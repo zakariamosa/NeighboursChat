@@ -67,17 +67,24 @@ class ChatLogActivity : AppCompatActivity() {
             //Log.d(TAG, "Try to send message....")
             performSendMessage()
             //startTripNotification()
-            val title = "my message title"
-            val message = "this is a notification from ${FirebaseAuth.getInstance().uid} to ${toUser!!.userId}"
-            val recipientToken = toUser!!.token
-            if(title.isNotEmpty() && message.isNotEmpty() && recipientToken.isNotEmpty()) {
-                PushNotification(
-                        NotificationData(title, message),
-                        recipientToken
-                ).also {
-                    sendNotification(it)
+            db.collection("users").whereEqualTo("userId",FirebaseAuth.getInstance().uid!!).get()
+                .addOnSuccessListener {
+                    for (document in it.documents){
+                        val title = document.toObject(User::class.java)?.userName
+                        val etChatLog: EditText = findViewById(R.id.et_chat_log)
+                        val message = etChatLog.text.toString()
+                        val recipientToken = toUser!!.token
+                        if(title!!.isNotEmpty() && message.isNotEmpty() && recipientToken.isNotEmpty()) {
+                            PushNotification(
+                                NotificationData(title, message),
+                                recipientToken
+                            ).also {
+                                sendNotification(it)
+                            }
+                        }
+                    }
                 }
-            }
+
         }
     }
 
