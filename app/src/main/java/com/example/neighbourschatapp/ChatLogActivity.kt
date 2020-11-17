@@ -66,7 +66,7 @@ class ChatLogActivity : AppCompatActivity() {
         btnSendChatLog.setOnClickListener {
             //Log.d(TAG, "Try to send message....")
             performSendMessage()
-            startTripNotification()
+            //startTripNotification()
             val title = "my message title"
             val message = "this is a notification from ${FirebaseAuth.getInstance().uid} to ${toUser!!.userId}"
             val recipientToken = toUser!!.token
@@ -93,7 +93,7 @@ class ChatLogActivity : AppCompatActivity() {
             Log.e(TAG, e.toString())
         }
     }
-
+/*
     private fun initChannel(channelId: String, channelName: String) {
         if (Build.VERSION.SDK_INT < 26) {
             return
@@ -120,7 +120,7 @@ class ChatLogActivity : AppCompatActivity() {
         val notificationManager = this?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(0, notification.build())
     }
-
+*/
     override fun onStop() {
         super.onStop()
         listener!!.remove()
