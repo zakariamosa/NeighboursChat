@@ -39,8 +39,6 @@ class LatestMessageChatRow(val chatMessage: ChatMessage): Item<ViewHolder>() {
             viewHolder.itemView.iv_latest_message_read.visibility = View.VISIBLE
         }
 
-
-
         val chatPartnerId: String
         if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
             chatPartnerId = chatMessage.toId
