@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import android.widget.Toast
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -46,6 +47,9 @@ class ProfileActivity : AppCompatActivity() {
             currentUser!!.userAge = myAge.text.toString()
             currentUser!!.userInterest = interest_profile.text.toString()
             FirebaseFirestore.getInstance().collection("users").document(currentUser!!.userId).set(currentUser!!)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Updated successfully!", Toast.LENGTH_SHORT).show()
+                }
         }
         change_picture_profile.setOnClickListener {
             pickImage()
