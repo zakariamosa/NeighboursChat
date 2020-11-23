@@ -47,6 +47,7 @@ class fragment_neighbourdistance : Fragment() {
         val btnSaveSettings=myview.findViewById<Button>(R.id.buttonSaveNeighbourLocationDistance)
         btnSaveSettings.setOnClickListener(){
             saveSettings(locationDistance.text.toString().toInt())
+
         }
 
 
@@ -75,6 +76,9 @@ class fragment_neighbourdistance : Fragment() {
             .addOnSuccessListener {
 
                 Toast.makeText(this@fragment_neighbourdistance.context, "Saved Successfully", Toast.LENGTH_SHORT).show()
+
+                val intent = Intent(this@fragment_neighbourdistance.context, SettingsActivity::class.java)
+                startActivity(intent)
             }
     }
 
