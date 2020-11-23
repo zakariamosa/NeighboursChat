@@ -23,9 +23,14 @@ class SettingsActivity : AppCompatActivity() {
 
 
 
-        val btnSignOut = findViewById<TextView>(R.id.btn_sign_out)
+        val btnSignOut = findViewById<Button>(R.id.btn_sign_out)
         btnSignOut.setOnClickListener {
             signOut()
+        }
+
+        val btnDeleteAccount = findViewById<Button>(R.id.btn_delete_account)
+        btnDeleteAccount.setOnClickListener {
+
         }
 
 
@@ -105,10 +110,12 @@ class SettingsActivity : AppCompatActivity() {
             btn_sign_out.visibility = View.INVISIBLE
             buttonBlock.visibility = View.INVISIBLE
             buttonNeighbourDistanceSetting.visibility = View.INVISIBLE
+            btn_delete_account.visibility = View.INVISIBLE
         } else {
             btn_sign_out.visibility = View.VISIBLE
             buttonBlock.visibility = View.VISIBLE
             buttonNeighbourDistanceSetting.visibility = View.VISIBLE
+            btn_delete_account.visibility = View.VISIBLE
         }
         return
 
