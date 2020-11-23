@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.*
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
@@ -87,13 +86,6 @@ class fragment_block_user : Fragment() {
             }
         }
         locationRequest = creatLocationRequest()
-
-        var returntosettings=myview.findViewById<FloatingActionButton>(R.id.floatingActionButton)
-        returntosettings.setOnClickListener(){
-            val intent = Intent(this@fragment_block_user.context, SettingsActivity::class.java)
-            startActivity(intent)
-        }
-
         return myview
     }
 

@@ -20,7 +20,7 @@ class BlockUserItem(val user: User) : Item<ViewHolder>() {
     }
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.tv_block_user_name.text = user.userName
-        //Picasso.get().load(user.userImageUrl).into(viewHolder.itemView.iv_block_user_photo)
+        Picasso.get().load(user.userImageUrl).into(viewHolder.itemView.iv_block_user_photo)
         viewHolder.itemView.checkBoxSelecttoBlock.isChecked=when(isuserblocked(blocklista,user)){
             true->true
             false->false

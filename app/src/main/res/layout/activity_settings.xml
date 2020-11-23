@@ -11,57 +11,44 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:theme="@style/MyButton"
         android:text="@string/sign_out"
-        android:textSize="16sp"
-        android:textAllCaps="false"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/buttonBlock"
-        android:layout_width="289dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="30dp"
-        android:text="Block"
-        android:textAllCaps="false"
-        android:textSize="16sp"
-        android:theme="@style/MyButton"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonNeighbourDistanceSetting" />
-
     <FrameLayout
         android:id="@+id/container"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="invisible"
+        android:layout_width="364dp"
+        android:layout_height="536dp"
+        android:layout_marginStart="31dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.113"
-        tools:visibility="visible">
+        app:layout_constraintTop_toTopOf="parent">
 
     </FrameLayout>
 
     <Button
         android:id="@+id/buttonNeighbourDistanceSetting"
-        android:layout_width="289dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="30dp"
-        android:theme="@style/MyButton"
-        android:text="Set neighbour distance"
-        android:textSize="16sp"
-        android:textAllCaps="false"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:text="Neighbour distance"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/buttonBlock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="10dp"
+        android:text="Block"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
