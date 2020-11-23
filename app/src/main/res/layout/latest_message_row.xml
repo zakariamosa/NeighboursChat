@@ -2,12 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@android:color/white"
-    android:layout_marginTop="5dp"
-    android:layout_marginStart="5dp"
-    android:layout_marginEnd="5dp"
     android:layout_width="match_parent"
-    android:layout_height="120dp">
+    android:layout_height="100dp"
+    android:layout_marginStart="5dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="5dp"
+    android:background="@drawable/recycler_view_user_background">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_latest_message"
@@ -25,8 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="104dp"
         android:text="@string/blank_space"
-        android:textStyle="bold"
         android:textColor="@android:color/black"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tv_chat_latest_message"
         app:layout_constraintStart_toEndOf="@+id/iv_latest_message"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,9 +38,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="@string/blank_space"
         android:maxLength="66"
         android:maxLines="2"
+        android:text="@string/blank_space"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tv_date_latest_message"
         app:layout_constraintHorizontal_bias="0.5"
@@ -59,10 +59,10 @@
 
     <ImageView
         android:id="@+id/iv_latest_message_read"
-        android:contentDescription="@string/image_new_message"
         android:layout_width="13dp"
         android:layout_height="13dp"
         android:layout_marginTop="5dp"
+        android:contentDescription="@string/image_new_message"
         app:layout_constraintEnd_toEndOf="@+id/tv_date_latest_message"
         app:layout_constraintStart_toStartOf="@+id/tv_date_latest_message"
         app:layout_constraintTop_toBottomOf="@+id/tv_date_latest_message"
