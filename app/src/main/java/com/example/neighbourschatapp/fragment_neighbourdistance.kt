@@ -2,15 +2,17 @@ package com.example.neighbourschatapp
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -41,6 +43,8 @@ class fragment_neighbourdistance : Fragment() {
 
         // Inflate the layout for this fragment
         val myview= inflater.inflate(R.layout.fragment_neighbourdistance, container, false)
+
+        (context as AppCompatActivity).supportActionBar!!.title = "Set searchdistance"
 
         locationDistance=myview.findViewById(R.id.editTextNumberNeighbourLocationDistance)
         loadUserSettings()
