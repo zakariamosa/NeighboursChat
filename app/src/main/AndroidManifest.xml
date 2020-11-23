@@ -21,6 +21,7 @@
             </intent-filter>
 
         </service>
+        <activity android:name=".block_user"></activity>
         <activity android:name=".block_user_row" />
         <activity
             android:name=".ChatLogActivity"
