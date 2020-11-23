@@ -8,15 +8,14 @@
 
     <TextView
         android:id="@+id/tv_user_name"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
         android:text="@string/user_name"
-        android:textSize="16sp"
         android:textColor="@android:color/black"
+        android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_user_photo"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_user_photo"
         app:layout_constraintTop_toTopOf="@+id/iv_user_photo" />
 
@@ -32,5 +31,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/tv_user_about"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="About"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_user_photo"
+        app:layout_constraintTop_toBottomOf="@+id/tv_user_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

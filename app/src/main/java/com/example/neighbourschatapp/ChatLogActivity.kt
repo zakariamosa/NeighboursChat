@@ -1,20 +1,36 @@
 package com.example.neighbourschatapp
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.graphics.BitmapFactory
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.gson.Gson
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.sql.Timestamp
 import java.util.*
+
+const val TOPIC = "/topics/myTopic2"
 
 class ChatLogActivity : AppCompatActivity() {
 
@@ -22,10 +38,22 @@ class ChatLogActivity : AppCompatActivity() {
     private lateinit var rcvChatLog: RecyclerView
     private var listener: ListenerRegistration? = null
     private var toUser: User? = null
+    private var lastMessage:String=""
+
+    val TAG = "ChatLogActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
+
+        val db=FirebaseFirestore.getInstance()
+        FirebaseService.sharedPref = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
+        FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
+            FirebaseService.token = it.token
+
+            db.collection("users").document(FirebaseAuth.getInstance().uid!!).update("token",it.token)
+        }
+        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
 
 
         toUser = intent.getParcelableExtra<User>("username")
@@ -39,9 +67,67 @@ class ChatLogActivity : AppCompatActivity() {
         btnSendChatLog.setOnClickListener {
             //Log.d(TAG, "Try to send message....")
             performSendMessage()
+            //startTripNotification()
+            db.collection("users").whereEqualTo("userId",FirebaseAuth.getInstance().uid!!).get()
+                .addOnSuccessListener {
+                    for (document in it.documents){
+                        val title = document.toObject(User::class.java)?.userName
+                        val message = lastMessage
+                        val recipientToken = toUser!!.token
+                        if(title!!.isNotEmpty() && message.isNotEmpty() && recipientToken.isNotEmpty()) {
+                            PushNotification(
+                                NotificationData(title, message),
+                                recipientToken
+                            ).also {
+                                sendNotification(it)
+                            }
+                        }
+                    }
+                }
+
         }
     }
 
+    private fun sendNotification(notification: PushNotification) = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val response = RetrofitInstance.api.postNotification(notification)
+            if(response.isSuccessful) {
+                Log.d(TAG, "Response: ${Gson().toJson(response)}")
+            } else {
+                Log.e(TAG, response.errorBody().toString())
+            }
+        } catch(e: Exception) {
+            Log.e(TAG, e.toString())
+        }
+    }
+/*
+    private fun initChannel(channelId: String, channelName: String) {
+        if (Build.VERSION.SDK_INT < 26) {
+            return
+        }
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
+
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun startTripNotification() {
+
+        val NOTIFICATION_CHANNEL_ID="abcdefg123456"
+        val NOTIFICATION_CHANNEL_NAME="developersgroup"
+        initChannel(NOTIFICATION_CHANNEL_ID, NOTIFICATION_CHANNEL_NAME)
+
+        val pendingIntent = PendingIntent.getActivity(this, 0, Intent(), 0)
+        val     notification = NotificationCompat.Builder(this,NOTIFICATION_CHANNEL_ID)
+                .setContentTitle("test notification title")
+                .setContentText("test notification text")
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setLargeIcon(BitmapFactory.decodeResource(this.resources, R.mipmap.ic_launcher))
+        notification.setContentIntent(pendingIntent)
+        val notificationManager = this?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(0, notification.build())
+    }
+*/
     override fun onStop() {
         super.onStop()
         listener!!.remove()
@@ -102,6 +188,7 @@ class ChatLogActivity : AppCompatActivity() {
             db.collection("user-messages").document("/$fromId/$toId/$messageId").set(chatMessageFrom)
                 .addOnSuccessListener {
                     //Log.d(TAG, "saved our message")
+                    lastMessage=etChatLog.text.toString()
                     etChatLog.text.clear()
                     rcvChatLog.scrollToPosition(adapter.itemCount -1)
                 }
