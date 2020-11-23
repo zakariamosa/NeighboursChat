@@ -46,11 +46,14 @@ class fragment_neighbourdistance : Fragment() {
         loadUserSettings()
         val btnSaveSettings=myview.findViewById<Button>(R.id.buttonSaveNeighbourLocationDistance)
         btnSaveSettings.setOnClickListener(){
-            saveSettings(locationDistance.text.toString().toInt())
+            if (locationDistance.text.toString().toInt() > 10) {
+                Toast.makeText(this@fragment_neighbourdistance.context, "Maximum distance allowed is 10 km", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                saveSettings(locationDistance.text.toString().toInt())
+            }
 
         }
-
-
         return myview
     }
 
