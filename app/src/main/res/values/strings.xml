@@ -19,4 +19,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="blank_space"> </string>
     <string name="image_new_message">Blue dot for new message</string>
+    <string name="first_screen_title">Meet your neighbour</string>
+    <string name="first_screen_des">Ever wonder who is staying next door but never have a chance to meet them?</string>
+    <string name="second_screen_title">Start at ease</string>
+    <string name="second_screen_des">Find people and start conversation in th easiest and most comfortable way that you can imagine.</string>
+    <string name="third_screen_title">Find own kind</string>
+    <string name="third_screen_des">Get the one with the same interest, now you will never have to go solo again.</string>
 </resources>
