@@ -1,8 +1,10 @@
 package com.example.neighbourschatapp
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -38,6 +40,7 @@ class LoginFragment: Fragment() {
 
         val btnLogin: Button = view.findViewById(R.id.login_button_login)
         val tvGoToRegister: TextView = view.findViewById(R.id.go_to_register_textview)
+        val tvPrivacyPolicy: TextView = view.findViewById(R.id.tv_privacy)
 
         btnLogin.setOnClickListener {
             performLogin()
@@ -50,7 +53,16 @@ class LoginFragment: Fragment() {
             val frag: Fragment = RegisterFragment()
             transaction.replace(R.id.main_fragment_layout, frag)
             transaction.commit()
+
         }
+
+        tvPrivacyPolicy.setOnClickListener {
+            context?.let { it1 -> openPrivacy("https://www.dropbox.com/s/zahk5dr8qm5vh2y/Near%20Peer%20Privacy%20Policy.txt?dl=0", it1) }
+        }
+
+
+
+
 
         thisactivity= getActivity()!!
         locationProvider = LocationServices.getFusedLocationProviderClient(thisactivity!!)
@@ -191,5 +203,13 @@ class LoginFragment: Fragment() {
 
     }
 
+    fun openPrivacy(urls: String, context: Context) {
+        val uris = Uri.parse(urls)
+        val intents = Intent(Intent.ACTION_VIEW, uris)
+        val b = Bundle()
+        b.putBoolean("new_window", true)
+        intents.putExtras(b)
+        context.startActivity(intents)
+    }
 
 }

@@ -11,12 +11,12 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="220dp"
+        android:layout_marginTop="200dp"
         android:layout_marginEnd="32dp"
+        android:autofillHints="@string/e_mail"
         android:background="@drawable/rounded_edittext_register_login"
         android:ems="10"
         android:hint="@string/e_mail"
-        android:autofillHints="@string/e_mail"
         android:inputType="textEmailAddress"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
@@ -66,6 +66,17 @@
         app:layout_constraintEnd_toEndOf="@+id/login_button_login"
         app:layout_constraintStart_toStartOf="@+id/login_button_login"
         app:layout_constraintTop_toBottomOf="@+id/login_button_login" />
+
+    <TextView
+        android:id="@+id/tv_privacy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/privacy_policy"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/go_to_register_textview" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

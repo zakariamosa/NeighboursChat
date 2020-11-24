@@ -46,7 +46,6 @@ class LatestMessageChatRow(val chatMessage: ChatMessage): Item<ViewHolder>() {
             chatPartnerId = chatMessage.fromId
         }
 
-        //kolla på att ändra detta till något som liknar ListenerForSingleEventValue ist. Detta känns onödigt långt.
         val db = FirebaseFirestore.getInstance()
         val query = db.collection("users")
         query.addSnapshotListener { p0, e ->

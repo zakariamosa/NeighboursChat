@@ -41,6 +41,9 @@ class RegisterFragment: Fragment() {
     private var currentuserlat:Double=0.0
     private var currentuserlong:Double=0.0
     lateinit var thisactivity:Activity
+    private var userAge = ""
+    private var userInterest = ""
+
 
     @ExperimentalStdlibApi
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -187,7 +190,7 @@ class RegisterFragment: Fragment() {
         val userId = FirebaseAuth.getInstance().uid ?: ""
         val db = FirebaseFirestore.getInstance()
         val user = User(userId, username_edittext_register.text.toString(), email_edittext_register.text.toString(), userImageUrl,
-            currentuserlat,currentuserlong,"")
+            currentuserlat,currentuserlong, userAge, userInterest, "")
 
         db.collection("users").document(userId).set(user)
             .addOnSuccessListener {
