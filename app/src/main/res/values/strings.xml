@@ -31,5 +31,6 @@
     <string name="setting_set_distance">Please insert the distance to search for online users (max 10KM).</string>
     <string name="privacy_policy">Read our privacy policy</string>
     <string name="user_deleted">User deleted</string>
+    <string name="i_agree">I agree to the Privacy Policy</string>
 
 </resources>

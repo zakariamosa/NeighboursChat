@@ -48,6 +48,7 @@ class fragment_neighbourdistance : Fragment() {
 
         locationDistance=myview.findViewById(R.id.editTextNumberNeighbourLocationDistance)
         loadUserSettings()
+
         val btnSaveSettings=myview.findViewById<Button>(R.id.buttonSaveNeighbourLocationDistance)
         btnSaveSettings.setOnClickListener(){
             if (locationDistance.text.toString().toInt() > 10) {
