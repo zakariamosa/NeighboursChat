@@ -5,11 +5,12 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -17,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -55,6 +57,9 @@ class fragment_block_user : Fragment() {
     ): View? {
         val myview=inflater.inflate(R.layout.fragment_block_user, container, false)
         rcvUsers = myview.findViewById(R.id.recycler_view_block_users)
+
+        (context as AppCompatActivity).supportActionBar!!.title = "Block user"
+
         val adapter = GroupAdapter <ViewHolder>()
         rcvUsers.adapter = adapter
 

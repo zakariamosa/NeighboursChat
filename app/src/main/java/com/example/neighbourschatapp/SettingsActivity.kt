@@ -20,14 +20,15 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-
-
-
-        val btnSignOut = findViewById<TextView>(R.id.btn_sign_out)
+        val btnSignOut = findViewById<Button>(R.id.btn_sign_out)
         btnSignOut.setOnClickListener {
             signOut()
         }
 
+        val btnDeleteAccount = findViewById<Button>(R.id.btn_delete_account)
+        btnDeleteAccount.setOnClickListener {
+
+        }
 
         val buttonNeighbourDistanceSetting=findViewById<Button>(R.id.buttonNeighbourDistanceSetting)
         buttonNeighbourDistanceSetting.setOnClickListener(){
@@ -56,8 +57,6 @@ class SettingsActivity : AppCompatActivity() {
             }
 
         }
-
-
         supportActionBar?.title = "Settings"
     }
 
@@ -89,10 +88,6 @@ class SettingsActivity : AppCompatActivity() {
 
     }
 
-
-
-
-
     private fun signOut() {
         FirebaseAuth.getInstance().signOut()
         val intent = Intent(this, MainActivity::class.java)
@@ -105,10 +100,12 @@ class SettingsActivity : AppCompatActivity() {
             btn_sign_out.visibility = View.INVISIBLE
             buttonBlock.visibility = View.INVISIBLE
             buttonNeighbourDistanceSetting.visibility = View.INVISIBLE
+            btn_delete_account.visibility = View.INVISIBLE
         } else {
             btn_sign_out.visibility = View.VISIBLE
             buttonBlock.visibility = View.VISIBLE
             buttonNeighbourDistanceSetting.visibility = View.VISIBLE
+            btn_delete_account.visibility = View.VISIBLE
         }
         return
 
