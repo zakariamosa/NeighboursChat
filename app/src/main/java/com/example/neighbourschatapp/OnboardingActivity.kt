@@ -11,7 +11,5 @@ class OnboardingActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-
     }
-
 }
