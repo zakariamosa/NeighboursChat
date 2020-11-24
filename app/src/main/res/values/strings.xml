@@ -21,5 +21,6 @@
     <string name="image_new_message">Blue dot for new message</string>
 
     <string name="setting_set_distance">Please insert the distance to search for online users (max 10KM).</string>
+    <string name="privacy_policy">Read our privacy policy</string>
 
 </resources>
