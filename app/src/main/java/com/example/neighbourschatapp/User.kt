@@ -10,7 +10,7 @@ från NewMessageActivity.
  */
 @Parcelize
 class User (val userId: String,
-            val userName: String,
+            var userName: String,
             val userEmail: String,
             var userImageUrl: String,
             val lastLocationLat: Double,
@@ -18,5 +18,6 @@ class User (val userId: String,
             var userAge: String,
             var userInterest: String,
             val token:String): Parcelable {
-    constructor() : this ("","","","",0.0,0.0,"", "", "")
+    constructor() : this ("","","","",0.0,
+            0.0,"", "", "")
 }

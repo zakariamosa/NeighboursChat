@@ -1,6 +1,7 @@
 package com.example.neighbourschatapp
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.ImageDecoder
@@ -14,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -54,11 +56,18 @@ class RegisterFragment: Fragment() {
         ivSelectedImage = view.findViewById(R.id.iv_selected_photo)
         val btnRegister: Button = view.findViewById(R.id.register_button_register)
         val tvBackToLogin: TextView = view.findViewById(R.id.back_to_login)
+        val agreeToTerms: CheckBox = view.findViewById(R.id.agree_to_terms_checkbox)
+        val tvPrivacyPolicy: TextView = view.findViewById(R.id.tv_privacy_policy)
 
         btnRegister.setOnClickListener {
-            performRegistration()
+            if (agreeToTerms.isChecked) {
+                performRegistration()
+            }
+            else {
+                Toast.makeText(activity!!.applicationContext, "To finish registration you have to agree to terms and conditions",
+                        Toast.LENGTH_SHORT).show()
+            }
         }
-
         //Denna klicklyssnare låter användaren välja en bild från den enhet som appen används på
         btnSelectPhotoRegister.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK)
@@ -74,10 +83,11 @@ class RegisterFragment: Fragment() {
             transaction.replace(R.id.main_fragment_layout, frag)
             transaction.commit()
         }
-
-
+        tvPrivacyPolicy.setOnClickListener {
+            context?.let { it1 -> openPrivacy("https://www.dropbox.com/s/zahk5dr8qm5vh2y/Near%20Peer%20Privacy%20Policy.txt?dl=0", it1) }
+        }
         thisactivity= getActivity()!!
-        locationProvider = LocationServices.getFusedLocationProviderClient(thisactivity!!)
+        locationProvider = LocationServices.getFusedLocationProviderClient(thisactivity)
 
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
@@ -88,7 +98,7 @@ class RegisterFragment: Fragment() {
             }
         }
 
-        if( ActivityCompat.checkSelfPermission(thisactivity!!.baseContext, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+        if( ActivityCompat.checkSelfPermission(thisactivity.baseContext, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
             Log.d("!!!", "no permission")
             ActivityCompat.requestPermissions(thisactivity, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
@@ -205,9 +215,6 @@ class RegisterFragment: Fragment() {
                 Log.d("Register", "Failed to add user")
             }
     }
-
-
-
     //Denna delen hanterar location
     override fun onResume() {
         super.onResume()
@@ -223,7 +230,7 @@ class RegisterFragment: Fragment() {
 
 
     fun startLocationUpdates() {
-        if( ActivityCompat.checkSelfPermission(thisactivity!!.baseContext, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+        if( ActivityCompat.checkSelfPermission(thisactivity.baseContext, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED) {
             locationProvider.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         }
@@ -253,5 +260,13 @@ class RegisterFragment: Fragment() {
             }
         }
 
+    }
+    fun openPrivacy(urls: String, context: Context) {
+        val uris = Uri.parse(urls)
+        val intents = Intent(Intent.ACTION_VIEW, uris)
+        val b = Bundle()
+        b.putBoolean("new_window", true)
+        intents.putExtras(b)
+        context.startActivity(intents)
     }
 }

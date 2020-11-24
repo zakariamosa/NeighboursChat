@@ -1,14 +1,11 @@
 package com.example.neighbourschatapp
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,10 +13,10 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.gms.location.*
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_login.*
 
@@ -40,7 +37,6 @@ class LoginFragment: Fragment() {
 
         val btnLogin: Button = view.findViewById(R.id.login_button_login)
         val tvGoToRegister: TextView = view.findViewById(R.id.go_to_register_textview)
-        val tvPrivacyPolicy: TextView = view.findViewById(R.id.tv_privacy)
 
         btnLogin.setOnClickListener {
             performLogin()
@@ -56,16 +52,8 @@ class LoginFragment: Fragment() {
 
         }
 
-        tvPrivacyPolicy.setOnClickListener {
-            context?.let { it1 -> openPrivacy("https://www.dropbox.com/s/zahk5dr8qm5vh2y/Near%20Peer%20Privacy%20Policy.txt?dl=0", it1) }
-        }
-
-
-
-
-
         thisactivity= getActivity()!!
-        locationProvider = LocationServices.getFusedLocationProviderClient(thisactivity!!)
+        locationProvider = LocationServices.getFusedLocationProviderClient(thisactivity)
 
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
@@ -75,8 +63,7 @@ class LoginFragment: Fragment() {
                 }
             }
         }
-
-        if( ActivityCompat.checkSelfPermission(thisactivity!!.baseContext, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+        if( ActivityCompat.checkSelfPermission(thisactivity.baseContext, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
             Log.d("!!!", "no permission")
             ActivityCompat.requestPermissions(thisactivity, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
@@ -90,9 +77,7 @@ class LoginFragment: Fragment() {
                     //will save this in user table
                 }
             }
-
         }
-
         locationRequest = creatLocationRequest()
 
         return view
@@ -150,11 +135,7 @@ class LoginFragment: Fragment() {
         val db=FirebaseFirestore.getInstance()
 
         db.collection("users").document(uid!!).update("lastLocationLat",currentuserlat,"lastLocationLong",currentuserlong)
-
-
-
     }
-
 
     //Denna delen hanterar location
     override fun onResume() {
@@ -169,9 +150,8 @@ class LoginFragment: Fragment() {
         stopLocationUpdates()
     }
 
-
     fun startLocationUpdates() {
-        if( ActivityCompat.checkSelfPermission(thisactivity!!.baseContext, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+        if( ActivityCompat.checkSelfPermission(thisactivity.baseContext, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
                 PackageManager.PERMISSION_GRANTED) {
             locationProvider.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         }
@@ -189,8 +169,6 @@ class LoginFragment: Fragment() {
                 priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             }
 
-
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if(requestCode == REQUEST_LOCATION ) {
             if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED ) {
@@ -202,14 +180,4 @@ class LoginFragment: Fragment() {
         }
 
     }
-
-    fun openPrivacy(urls: String, context: Context) {
-        val uris = Uri.parse(urls)
-        val intents = Intent(Intent.ACTION_VIEW, uris)
-        val b = Bundle()
-        b.putBoolean("new_window", true)
-        intents.putExtras(b)
-        context.startActivity(intents)
-    }
-
 }

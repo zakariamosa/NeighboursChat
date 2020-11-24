@@ -11,11 +11,11 @@
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/round_image_select_photo"
-        android:text="@string/select_photo"
         android:gravity="center"
+        android:text="@string/select_photo"
         android:textColor="@android:color/darker_gray"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,12 +26,12 @@
         android:id="@+id/iv_selected_photo"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        app:civ_border_width="2dp"
         app:civ_border_color="@android:color/holo_blue_dark"
+        app:civ_border_width="2dp"
         app:layout_constraintBottom_toBottomOf="@+id/btn_select_photo_register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btn_select_photo_register" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <EditText
@@ -100,13 +100,37 @@
         android:id="@+id/back_to_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
         android:text="@string/back_to_login"
         android:textColor="@android:color/background_dark"
         android:textSize="16sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/register_button_register"
+        app:layout_constraintTop_toBottomOf="@+id/agree_to_terms_checkbox" />
+
+    <TextView
+        android:id="@+id/tv_privacy_policy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/privacy_policy"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/register_button_register"
+        app:layout_constraintTop_toBottomOf="@+id/agree_to_terms_checkbox" />
+
+    <CheckBox
+        android:id="@+id/agree_to_terms_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/i_agree"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/register_button_register"
         app:layout_constraintStart_toStartOf="@+id/register_button_register"
         app:layout_constraintTop_toBottomOf="@+id/register_button_register" />
