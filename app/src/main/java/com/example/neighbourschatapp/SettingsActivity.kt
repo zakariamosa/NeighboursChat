@@ -3,12 +3,19 @@ package com.example.neighbourschatapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.text.set
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.EmailAuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_settings.*
@@ -22,20 +29,27 @@ class SettingsActivity : AppCompatActivity() {
 
         val btnSignOut = findViewById<Button>(R.id.btn_sign_out)
         btnSignOut.setOnClickListener {
-            signOut()
+            val builder = AlertDialog.Builder(this@SettingsActivity)
+            builder.setMessage("Are you sure you want to sign out?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes") { dialog, id ->
+                        signOut()
+                    }
+                    .setNegativeButton("No") { dialog, id ->
+                        dialog.dismiss()
+                    }
+            val alert = builder.create()
+            alert.show()
+            //signOut()
         }
-
         val btnDeleteAccount = findViewById<Button>(R.id.btn_delete_account)
         btnDeleteAccount.setOnClickListener {
-
+            deleteAccount()
         }
-
         val buttonNeighbourDistanceSetting=findViewById<Button>(R.id.buttonNeighbourDistanceSetting)
         buttonNeighbourDistanceSetting.setOnClickListener(){
             callNeighbourDistanceSetting()
-
         }
-
         val buttonBlockList=findViewById<Button>(R.id.buttonBlock)
         buttonBlockList.setOnClickListener(){
             val db = FirebaseFirestore.getInstance()
@@ -93,6 +107,28 @@ class SettingsActivity : AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
+    }
+    private fun deleteAccount() {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        currentUser
+                ?.delete()
+                ?.addOnSuccessListener(this, {
+                    Toast.makeText(this, "Your account was successfully deleted " +
+                            "and will be removed from database as soon as possible",
+                            Toast.LENGTH_SHORT).show()
+                })
+                ?.addOnFailureListener(this, {
+                    Toast.makeText(this, "Failed to delete account", Toast.LENGTH_SHORT).show()
+                })
+        val waitForToast: CountDownTimer = object : CountDownTimer (2000, 1000) {
+            override fun onFinish() {
+                val intent = Intent(this@SettingsActivity, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+            override fun onTick(millisUntilFinished: Long) {}
+        }
+        waitForToast.start()
     }
 
     private fun toggleVisibility() {

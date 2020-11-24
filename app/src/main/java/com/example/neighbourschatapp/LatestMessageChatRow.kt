@@ -30,45 +30,45 @@ class LatestMessageChatRow(val chatMessage: ChatMessage): Item<ViewHolder>() {
 
 
     override fun bind(viewHolder: ViewHolder, position: Int) {
-        viewHolder.itemView.tv_chat_latest_message.text = chatMessage.text
-        viewHolder.itemView.tv_date_latest_message.text = convertLongToTime(chatMessage.timeStamp)
-        if (chatMessage.read == true) {
-            viewHolder.itemView.iv_latest_message_read.visibility = View.GONE
-        }
-        else if (chatMessage.read == false) {
-            viewHolder.itemView.iv_latest_message_read.visibility = View.VISIBLE
-        }
+            viewHolder.itemView.tv_chat_latest_message.text = chatMessage.text
+            viewHolder.itemView.tv_date_latest_message.text = convertLongToTime(chatMessage.timeStamp)
+            if (chatMessage.read == true) {
+                viewHolder.itemView.iv_latest_message_read.visibility = View.GONE
+            } else if (chatMessage.read == false) {
+                viewHolder.itemView.iv_latest_message_read.visibility = View.VISIBLE
+            }
 
-        val chatPartnerId: String
-        if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
-            chatPartnerId = chatMessage.toId
-        } else {
-            chatPartnerId = chatMessage.fromId
-        }
+            val chatPartnerId: String
+            if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
+                chatPartnerId = chatMessage.toId
+            }
+            else {
+                chatPartnerId = chatMessage.fromId
+            }
 
-        val db = FirebaseFirestore.getInstance()
-        val query = db.collection("users")
-        query.addSnapshotListener { p0, e ->
-            if (p0 != null) {
-                for (dc in p0.documentChanges) {
-                    val user = dc.document.toObject(User::class.java)
-                    if (user.userId == chatPartnerId) {
-                        chatPartnerUser = user
-                        var targetImageView = viewHolder.itemView.iv_latest_message
-                        Picasso.get().load(user.userImageUrl).into(targetImageView)
-                        val chatPartnerUsername = user.userName
-                        if (dc.type == DocumentChange.Type.ADDED) {
-                            targetImageView = viewHolder.itemView.iv_latest_message
+            val db = FirebaseFirestore.getInstance()
+            val query = db.collection("users")
+            query.addSnapshotListener { p0, e ->
+                if (p0 != null) {
+                    for (dc in p0.documentChanges) {
+                        val user = dc.document.toObject(User::class.java)
+                        if (user.userId == chatPartnerId) {
+                            chatPartnerUser = user
+                            var targetImageView = viewHolder.itemView.iv_latest_message
                             Picasso.get().load(user.userImageUrl).into(targetImageView)
-                            viewHolder.itemView.tv_username_latest_message.text =
-                                chatPartnerUsername
-                        } else if (dc.type == DocumentChange.Type.MODIFIED) {
-                            viewHolder.itemView.tv_username_latest_message.text =
-                                chatPartnerUsername
-                        }}
+                            val chatPartnerUsername = user.userName
+                            if (dc.type == DocumentChange.Type.ADDED) {
+                                targetImageView = viewHolder.itemView.iv_latest_message
+                                Picasso.get().load(user.userImageUrl).into(targetImageView)
+                                viewHolder.itemView.tv_username_latest_message.text =
+                                        chatPartnerUsername
+                            } else if (dc.type == DocumentChange.Type.MODIFIED) {
+                                viewHolder.itemView.tv_username_latest_message.text =
+                                        chatPartnerUsername
+                            }
+                        }
                     }
                 }
-
             }
         }
     fun convertLongToTime(time: Long): String {

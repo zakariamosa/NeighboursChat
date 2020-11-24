@@ -205,9 +205,6 @@ class RegisterFragment: Fragment() {
                 Log.d("Register", "Failed to add user")
             }
     }
-
-
-
     //Denna delen hanterar location
     override fun onResume() {
         super.onResume()
