@@ -40,11 +40,20 @@ class SettingsActivity : AppCompatActivity() {
                     }
             val alert = builder.create()
             alert.show()
-            //signOut()
         }
         val btnDeleteAccount = findViewById<Button>(R.id.btn_delete_account)
         btnDeleteAccount.setOnClickListener {
-            deleteAccount()
+            val builder = AlertDialog.Builder(this@SettingsActivity)
+            builder.setMessage("Are you sure you want to delete your account?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes") { dialog, id ->
+                        deleteAccount()
+                    }
+                    .setNegativeButton("No") { dialog, od ->
+                        dialog.dismiss()
+                    }
+            val alert = builder.create()
+            alert.show()
         }
         val buttonNeighbourDistanceSetting=findViewById<Button>(R.id.buttonNeighbourDistanceSetting)
         buttonNeighbourDistanceSetting.setOnClickListener(){
@@ -116,19 +125,19 @@ class SettingsActivity : AppCompatActivity() {
                     Toast.makeText(this, "Your account was successfully deleted " +
                             "and will be removed from database as soon as possible",
                             Toast.LENGTH_SHORT).show()
+                    val waitForToast: CountDownTimer = object : CountDownTimer (2000, 1000) {
+                        override fun onFinish() {
+                            val intent = Intent(this@SettingsActivity, MainActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            startActivity(intent)
+                        }
+                        override fun onTick(millisUntilFinished: Long) {}
+                    }
+                    waitForToast.start()
                 })
                 ?.addOnFailureListener(this, {
                     Toast.makeText(this, "Failed to delete account", Toast.LENGTH_SHORT).show()
                 })
-        val waitForToast: CountDownTimer = object : CountDownTimer (2000, 1000) {
-            override fun onFinish() {
-                val intent = Intent(this@SettingsActivity, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-            }
-            override fun onTick(millisUntilFinished: Long) {}
-        }
-        waitForToast.start()
     }
 
     private fun toggleVisibility() {
