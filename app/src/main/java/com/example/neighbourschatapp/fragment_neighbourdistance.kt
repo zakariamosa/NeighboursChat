@@ -2,6 +2,7 @@ package com.example.neighbourschatapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -51,6 +52,7 @@ class fragment_neighbourdistance : Fragment() {
 
         (context as AppCompatActivity).supportActionBar!!.title = "Set searchdistance"
 
+        Log.d("!!!", locationDistance.toString())
         ld = myview.findViewById(R.id.location_seekBar)
         loadUserSettings()
 
@@ -85,6 +87,8 @@ class fragment_neighbourdistance : Fragment() {
                 locationDistance = it.result.data?.get("locationDistance").toString().toInt()
             }
         }
+        Log.d("!!!", locationDistance.toString())
+
     }
 
     private fun saveSettings(locationDistance:Int) {

@@ -121,10 +121,10 @@ class SettingsActivity : AppCompatActivity() {
         val currentUser = FirebaseAuth.getInstance().currentUser
         currentUser
                 ?.delete()
-                ?.addOnSuccessListener(this, {
+                ?.addOnSuccessListener(this) {
                     Toast.makeText(this, "Your account was successfully deleted " +
                             "and will be removed from database as soon as possible",
-                            Toast.LENGTH_SHORT).show()
+                        Toast.LENGTH_SHORT).show()
                     val waitForToast: CountDownTimer = object : CountDownTimer (2000, 1000) {
                         override fun onFinish() {
                             val intent = Intent(this@SettingsActivity, MainActivity::class.java)
@@ -134,10 +134,10 @@ class SettingsActivity : AppCompatActivity() {
                         override fun onTick(millisUntilFinished: Long) {}
                     }
                     waitForToast.start()
-                })
-                ?.addOnFailureListener(this, {
-                    Toast.makeText(this, "Failed to delete account", Toast.LENGTH_SHORT).show()
-                })
+                }
+            ?.addOnFailureListener(this) {
+                Toast.makeText(this, "Failed to delete account", Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun toggleVisibility() {
