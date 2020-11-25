@@ -2,6 +2,7 @@ package com.example.neighbourschatapp
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,7 +51,6 @@ class fragment_neighbourdistance : Fragment() {
 
         (context as AppCompatActivity).supportActionBar!!.title = "Set searchdistance"
 
-        //locationDistance=myview.findViewById(R.id.editTextNumberNeighbourLocationDistance)
         ld = myview.findViewById(R.id.location_seekBar)
         loadUserSettings()
 
@@ -69,7 +69,6 @@ class fragment_neighbourdistance : Fragment() {
 
         val btnSaveSettings=myview.findViewById<Button>(R.id.buttonSaveNeighbourLocationDistance)
         btnSaveSettings.setOnClickListener(){
-            //locationDistance = ld.toString().toInt()
             saveSettings(locationDistance.toString().toInt())
         }
         return myview
@@ -83,7 +82,7 @@ class fragment_neighbourdistance : Fragment() {
         itemRef.addOnCompleteListener(){
             if (it.isSuccessful){
                 ld.setProgress(it.result.data?.get("locationDistance").toString().toInt())
-
+                locationDistance = it.result.data?.get("locationDistance").toString().toInt()
             }
         }
     }
