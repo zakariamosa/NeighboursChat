@@ -32,5 +32,10 @@
     <string name="privacy_policy">Read our privacy policy</string>
     <string name="user_deleted">User deleted</string>
     <string name="i_agree">I agree to the Privacy Policy</string>
+    <string name="profile_picture">Profile picture</string>
+    <string name="age">Age</string>
+    <string name="update_profile">Update profile</string>
+    <string name="about">About</string>
+    <string name="save">SAVE</string>
 
 </resources>

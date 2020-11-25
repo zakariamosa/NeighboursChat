@@ -18,6 +18,8 @@ class MainActivity : AppCompatActivity() {
         //Här kontrolleras om användaren är inloggad.
         verifyUserIsLoggedIn()
 
+        addBlockList()
+
         //Här laddar jag LoginFragment så fort mainactivity startas.
         loadFragment(LoginFragment())
     }
@@ -29,28 +31,34 @@ class MainActivity : AppCompatActivity() {
         transaction.addToBackStack(null)
         transaction.commit()
     }
+
     private fun verifyUserIsLoggedIn() {
         val userId = FirebaseAuth.getInstance().uid
 
         if (userId != null) {
-            val db = FirebaseFirestore.getInstance()
-            blocklista.clear()
-            val itemRef =db.collection("BlockList").document(userId).collection("UserBlockedList")
-            itemRef.addSnapshotListener(){snapshot,e->
-                if (snapshot!=null){
-                    for (document in snapshot.documents){
-                        val settingblockuser =document.toObject(User::class.java)
-                        if (settingblockuser!=null){
+            val intent = Intent(this, ChatActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
+    }
+
+    private fun addBlockList() {
+        val userId = FirebaseAuth.getInstance().uid
+
+        val db = FirebaseFirestore.getInstance()
+        blocklista.clear()
+        if (userId != null) {
+            val itemRef = db.collection("BlockList").document(userId).collection("UserBlockedList")
+            itemRef.addSnapshotListener() { snapshot, e ->
+                if (snapshot != null) {
+                    for (document in snapshot.documents) {
+                        val settingblockuser = document.toObject(User::class.java)
+                        if (settingblockuser != null) {
                             blocklista.add(settingblockuser)
                         }
                     }
                 }
-                val intent = Intent(this, ChatActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                startActivity(intent)
-
             }
-
         }
     }
 }

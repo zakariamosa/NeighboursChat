@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.fragment_neighbourdistance.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -28,7 +30,9 @@ class fragment_neighbourdistance : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-    lateinit var locationDistance:EditText
+    var locationDistance: Int? = null
+    lateinit var ld: SeekBar
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,18 +50,27 @@ class fragment_neighbourdistance : Fragment() {
 
         (context as AppCompatActivity).supportActionBar!!.title = "Set searchdistance"
 
-        locationDistance=myview.findViewById(R.id.editTextNumberNeighbourLocationDistance)
+        //locationDistance=myview.findViewById(R.id.editTextNumberNeighbourLocationDistance)
+        ld = myview.findViewById(R.id.location_seekBar)
         loadUserSettings()
+
+        ld.setOnSeekBarChangeListener(object: SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, i: Int, b: Boolean
+            ) {
+                tv_location_distance.text = "$i kilometers"
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                locationDistance = ld.progress
+
+            }
+        })
 
         val btnSaveSettings=myview.findViewById<Button>(R.id.buttonSaveNeighbourLocationDistance)
         btnSaveSettings.setOnClickListener(){
-            if (locationDistance.text.toString().toInt() > 10) {
-                Toast.makeText(this@fragment_neighbourdistance.context, "Maximum distance allowed is 10 km", Toast.LENGTH_SHORT).show()
-            }
-            else {
-                saveSettings(locationDistance.text.toString().toInt())
-            }
-
+            //locationDistance = ld.toString().toInt()
+            saveSettings(locationDistance.toString().toInt())
         }
         return myview
     }
@@ -69,7 +82,7 @@ class fragment_neighbourdistance : Fragment() {
         val itemRef = db.collection("Settings").document(currentUser!!.uid).get()
         itemRef.addOnCompleteListener(){
             if (it.isSuccessful){
-                locationDistance.setText(it.result.data?.get("locationDistance").toString())
+                ld.setProgress(it.result.data?.get("locationDistance").toString().toInt())
 
             }
         }
