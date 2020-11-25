@@ -46,6 +46,10 @@ class ChatActivity : AppCompatActivity() {
 
         userImageToolBar = findViewById<ImageView>(R.id.iv_user_photo_toolbar)
 
+        val openUserProfile: ImageView = findViewById(R.id.iv_user_photo_toolbar)
+        val openSettings: ImageView = findViewById(R.id.iv_settings_toolbar)
+        val openNewMessage: ImageView = findViewById(R.id.iv_new_message_toolbar)
+
         val rcvLatestChat: RecyclerView = findViewById(R.id.recycler_view_latest_chat)
         rcvLatestChat.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
         rcvLatestChat.adapter = adapter
@@ -72,6 +76,22 @@ class ChatActivity : AppCompatActivity() {
 
         fetchCurrentUser()
         listenForLatestMessages()
+
+        openUserProfile.setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
+        openSettings.setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
+        openNewMessage.setOnClickListener {
+            val intent = Intent(this, NewMessageActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
 
 
     }
