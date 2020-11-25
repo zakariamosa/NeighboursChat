@@ -8,6 +8,7 @@ import android.provider.DocumentsContract
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -17,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.database.Query
 import com.google.firebase.firestore.*
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import java.time.LocalDateTime
@@ -31,6 +33,7 @@ class ChatActivity : AppCompatActivity() {
     companion object {
         var currentUser: User? = null
     }
+    lateinit var userImageToolBar: ImageView
     val latestMessagesMap = HashMap <String, ChatMessage>()
     var chatMessage = ChatMessage()
     val adapter = GroupAdapter <ViewHolder>()
@@ -40,6 +43,8 @@ class ChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat)
+
+        userImageToolBar = findViewById<ImageView>(R.id.iv_user_photo_toolbar)
 
         val rcvLatestChat: RecyclerView = findViewById(R.id.recycler_view_latest_chat)
         rcvLatestChat.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
@@ -118,6 +123,7 @@ class ChatActivity : AppCompatActivity() {
                 if (documentSnapshot != null) {
                     currentUser = documentSnapshot.toObject(User::class.java)
                     Log.d("!!!!", currentUser!!.userName)
+                    Picasso.get().load(currentUser!!.userImageUrl).into(userImageToolBar)
                 }
             }
     }
