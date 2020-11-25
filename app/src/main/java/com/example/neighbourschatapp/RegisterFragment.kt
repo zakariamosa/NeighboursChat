@@ -25,7 +25,6 @@ import androidx.fragment.app.FragmentTransaction
 import com.google.android.gms.location.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.storage.FirebaseStorage
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.fragment_register.*
@@ -64,7 +63,7 @@ class RegisterFragment: Fragment() {
                 performRegistration()
             }
             else {
-                Toast.makeText(activity!!.applicationContext, "To finish registration you have to agree to terms and conditions",
+                Toast.makeText(requireActivity().applicationContext, "To finish registration you have to agree to terms and conditions",
                         Toast.LENGTH_SHORT).show()
             }
         }
@@ -78,7 +77,7 @@ class RegisterFragment: Fragment() {
 
         //Denna knapp skickar användaren tillbaka till inloggningssidan
         tvBackToLogin.setOnClickListener {
-            val transaction: FragmentTransaction = this.fragmentManager!!.beginTransaction()
+            val transaction: FragmentTransaction = this.requireFragmentManager().beginTransaction()
             val frag: Fragment = LoginFragment()
             transaction.replace(R.id.main_fragment_layout, frag)
             transaction.commit()
@@ -86,7 +85,7 @@ class RegisterFragment: Fragment() {
         tvPrivacyPolicy.setOnClickListener {
             context?.let { it1 -> openPrivacy("https://www.dropbox.com/s/zahk5dr8qm5vh2y/Near%20Peer%20Privacy%20Policy.txt?dl=0", it1) }
         }
-        thisactivity= getActivity()!!
+        thisactivity= requireActivity()
         locationProvider = LocationServices.getFusedLocationProviderClient(thisactivity)
 
         locationCallback = object : LocationCallback() {
@@ -132,11 +131,11 @@ class RegisterFragment: Fragment() {
             //Här använder jag två olika alternativ för att hämta skapa bitmap. Det senare alternativet fungerar inte på modeller äldre än version 28
             val bitmap = when {
                 Build.VERSION.SDK_INT < 28 -> MediaStore.Images.Media.getBitmap(
-                        activity!!.applicationContext.contentResolver,
+                        requireActivity().applicationContext.contentResolver,
                         selectedPhotoUri
                 )
                 else -> {
-                    val source = ImageDecoder.createSource(activity!!.applicationContext.contentResolver, selectedPhotoUri!!)
+                    val source = ImageDecoder.createSource(requireActivity().applicationContext.contentResolver, selectedPhotoUri!!)
                     ImageDecoder.decodeBitmap(source)
                 }
             }
@@ -156,7 +155,7 @@ class RegisterFragment: Fragment() {
         val password = password_edittext_register.text.toString()
 
         if (eMail.isEmpty() || password.isEmpty()) {
-            Toast.makeText(activity!!.applicationContext, "Please enter both e-mail and password", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireActivity().applicationContext, "Please enter both e-mail and password", Toast.LENGTH_SHORT).show()
             return
         }
         Log.d("Register", "Email is $eMail")
@@ -170,7 +169,7 @@ class RegisterFragment: Fragment() {
                 uploadImageToFirebaseStorage()
             }
             .addOnFailureListener {
-                Toast.makeText(activity!!.applicationContext, "Failed to create user: ${it.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireActivity().applicationContext, "Failed to create user: ${it.message}", Toast.LENGTH_SHORT).show()
                 Log.d("Register", "Failed to create user: ${it.message}")
 
             }
@@ -205,15 +204,25 @@ class RegisterFragment: Fragment() {
         db.collection("users").document(userId).set(user)
             .addOnSuccessListener {
                 Log.d("Register", "We finally saved the user to firebase database!!")
+                saveLocationSettings()
 
                 val intent = Intent(this@RegisterFragment.context, ChatActivity::class.java)
                 //Denna rad rensar upp i tidigare aktiviteter
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
+
+
             }
             .addOnFailureListener {
                 Log.d("Register", "Failed to add user")
             }
+    }
+    private fun saveLocationSettings() {
+        val userId = FirebaseAuth.getInstance().uid ?: ""
+        val db = FirebaseFirestore.getInstance()
+        val userSettings = UserSettings(5)
+
+        db.collection("Settings").document(userId).set(userSettings)
     }
     //Denna delen hanterar location
     override fun onResume() {
