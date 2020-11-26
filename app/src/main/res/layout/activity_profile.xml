@@ -20,6 +20,15 @@ tools:context=".ProfileActivity">
 
     </androidx.appcompat.widget.Toolbar>
 
+    <View
+        android:id="@+id/border_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
     <Button
         android:id="@+id/profile_button"
         android:layout_width="150dp"
@@ -170,7 +179,7 @@ tools:context=".ProfileActivity">
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
         app:layout_constraintStart_toStartOf="@+id/toolbar"
         app:layout_constraintTop_toTopOf="@+id/toolbar"
-        app:srcCompat="@drawable/back_button_circle_toolbar"
+        app:srcCompat="@drawable/back_button_line_toolbar"
         android:contentDescription="@string/iv_content_description" />
 
 

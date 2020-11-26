@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Looper
 import android.os.PersistableBundle
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -32,8 +33,7 @@ class NewMessageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_message)
 
-        supportActionBar?.title = "Start a new chat-conversation"
-
+        val backButtonToolbar: ImageView = findViewById(R.id.iv_back_button_new_chat_toolbar)
         rcvUsers = findViewById(R.id.recycler_view_users)
         val adapter = GroupAdapter <ViewHolder>()
         rcvUsers.adapter = adapter
@@ -67,6 +67,12 @@ class NewMessageActivity : AppCompatActivity() {
             }
         }
         locationRequest = creatLocationRequest()
+
+        backButtonToolbar.setOnClickListener {
+            val intent = Intent(this, ChatActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
     }
     //Denna funktion laddar alla registrerade användare i en recyclerview i realtid, men laddar listan två gånger
     private fun fetchUsers() {

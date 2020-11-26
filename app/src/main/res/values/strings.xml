@@ -39,6 +39,8 @@
     <string name="iv_content_description">ImageView</string>
     <string name="save">SAVE</string>
     <string name="recent_chats_toolbar">LATEST CHATS</string>
-    <string name="update_profile_toolbar">UPDATE PROFILE</string>
+    <string name="update_profile_toolbar">EDIT PROFILE</string>
+    <string name="start_new_chat_toolbar">WHO IS NEAR YOU?</string>
+    <string name="info_message_toolbar_new_chat">Click on user to start new conversation</string>
 
 </resources>

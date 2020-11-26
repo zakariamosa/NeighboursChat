@@ -36,8 +36,6 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        supportActionBar?.title = "Edit profile"
-
         val backButtonToolbar: ImageView = findViewById(R.id.iv_back_button_profile_toolbar)
         storageRef = FirebaseStorage.getInstance().reference.child("images/")
         myProfilePic = findViewById<CircleImageView>(R.id.round_picture)
