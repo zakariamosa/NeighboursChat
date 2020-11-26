@@ -28,7 +28,8 @@
     <string name="second_screen_des">Find people and start conversation in th easiest and most comfortable way that you can imagine.</string>
     <string name="third_screen_title">Find own kind</string>
     <string name="third_screen_des">Get the one with the same interest, now you will never have to go solo again.</string>
-    <string name="setting_set_distance">Please insert the distance to search for online users (max 10KM).</string>
+    <string name="setting_set_distance">Search Distance</string>
+    <string name="zero_km">0 kilometers</string>
     <string name="privacy_policy">Read our privacy policy</string>
     <string name="user_deleted">User deleted</string>
     <string name="i_agree">I agree to the Privacy Policy</string>

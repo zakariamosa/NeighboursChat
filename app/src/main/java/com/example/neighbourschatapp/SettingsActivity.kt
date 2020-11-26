@@ -57,7 +57,8 @@ class SettingsActivity : AppCompatActivity() {
         }
         val buttonNeighbourDistanceSetting=findViewById<Button>(R.id.buttonNeighbourDistanceSetting)
         buttonNeighbourDistanceSetting.setOnClickListener(){
-            callNeighbourDistanceSetting()
+            val intent = Intent(this, SetDistanceActivity::class.java)
+            startActivity(intent)
         }
         val buttonBlockList=findViewById<Button>(R.id.buttonBlock)
         buttonBlockList.setOnClickListener(){
@@ -95,20 +96,6 @@ class SettingsActivity : AppCompatActivity() {
         transaction.replace(R.id.container, blockListSettingFragment, "blockuserlist" )
 
         transaction.commit()
-    }
-
-    private fun callNeighbourDistanceSetting() {
-
-        container.visibility = View.VISIBLE
-        toggleVisibility()
-
-        val neighbourDistanceSettingFragment =  fragment_neighbourdistance.newInstance("","")
-
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.container, neighbourDistanceSettingFragment, "neighbourdistance" )
-
-        transaction.commit()
-
     }
 
     private fun signOut() {

@@ -4,66 +4,63 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:tag="neighbourdistance"
-    tools:context=".fragment_neighbourdistance">
-
-    <!-- TODO: Update blank fragment layout -->
+    android:background="@drawable/city_background"
+    tools:context=".SetDistanceActivity">
 
     <TextView
-        android:id="@+id/textView4"
-        android:layout_width="294dp"
-        android:layout_height="68dp"
-        android:layout_marginTop="200dp"
+        android:id="@+id/tv_set_distance_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="40dp"
         android:text="@string/setting_set_distance"
-        android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/buttonSaveNeighbourLocationDistance"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:background="@drawable/rounded_edittext_register_login"
-        android:text="@string/save"
-        android:textAllCaps="false"
-        android:textColor="@android:color/black"
-        android:theme="@style/MyButton"
-        app:layout_constraintEnd_toEndOf="@+id/textView4"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/tv_location_distance" />
+        app:layout_constraintBottom_toTopOf="@+id/location_seekBar"
+        app:layout_constraintStart_toStartOf="@+id/location_seekBar" />
 
     <SeekBar
         android:id="@+id/location_seekBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginBottom="70dp"
         android:max="10"
         android:progressDrawable="@drawable/seekbar_style"
         android:thumb="@drawable/costum_thumb"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_location_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="40dp"
+        android:gravity="center"
+        android:text="@string/zero_km"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/location_seekBar"
+        app:layout_constraintEnd_toEndOf="@+id/location_seekBar" />
+
+    <Button
+        android:id="@+id/buttonSaveNeighbourLocationDistance"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:text=""
-        android:textSize="20sp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/rounded_edittext_register_login"
+        android:text="@string/save"
+        android:textAllCaps="false"
         android:textColor="@android:color/black"
+        android:theme="@style/MyButton"
         app:layout_constraintEnd_toEndOf="@+id/location_seekBar"
         app:layout_constraintStart_toStartOf="@+id/location_seekBar"
         app:layout_constraintTop_toBottomOf="@+id/location_seekBar" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
