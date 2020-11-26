@@ -7,6 +7,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.tasks.Continuation
@@ -37,6 +38,7 @@ class ProfileActivity : AppCompatActivity() {
 
         supportActionBar?.title = "Edit profile"
 
+        val backButtonToolbar: ImageView = findViewById(R.id.iv_back_button_profile_toolbar)
         storageRef = FirebaseStorage.getInstance().reference.child("images/")
         myProfilePic = findViewById<CircleImageView>(R.id.round_picture)
         myAge = findViewById(R.id.age_profile)
@@ -53,6 +55,11 @@ class ProfileActivity : AppCompatActivity() {
         }
         change_picture_profile.setOnClickListener {
             pickImage()
+        }
+        backButtonToolbar.setOnClickListener {
+            val intent = Intent(this, ChatActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
         }
     }
 
@@ -95,10 +102,10 @@ class ProfileActivity : AppCompatActivity() {
             }).addOnCompleteListener{ task ->
                 if(task.isSuccessful) {
                     val downloadUrl = task.result
-                    var mUri = downloadUrl.toString()
+                    val mUri = downloadUrl.toString()
                     currentUser!!.userImageUrl = mUri
                     FirebaseFirestore.getInstance().collection("users").document(currentUser!!.userId).set(currentUser!!)
-                    var userPic = currentUser?.userImageUrl
+                    val userPic = currentUser?.userImageUrl
                     Picasso.get().load(userPic).into(myProfilePic)
                     progressBar.dismiss()
                 }
@@ -119,7 +126,7 @@ class ProfileActivity : AppCompatActivity() {
                     name_profile.setText(currentUser!!.userName)
                     interest_profile.setText(currentUser!!.userInterest)
                     age_profile.setText(currentUser!!.userAge)
-                    var userPic = currentUser?.userImageUrl
+                    val userPic = currentUser?.userImageUrl
                     Picasso.get().load(userPic).into(myProfilePic)
                     profile_button.alpha = 0f
                     Log.d("Profile", "UserImageUrl: $userPic")
