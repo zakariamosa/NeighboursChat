@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -40,6 +41,12 @@ class SetDistanceActivity : AppCompatActivity() {
         btnSaveSettings.setOnClickListener(){
             saveSettings(locationDistance.toString().toInt())
         }
+        val backButtonSetDistance: ImageView = findViewById(R.id.iv_back_button_set_distance_toolbar)
+        backButtonSetDistance.setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
     }
 
     private fun loadUserSettings() {
@@ -66,9 +73,6 @@ class SetDistanceActivity : AppCompatActivity() {
                 .addOnSuccessListener {
 
                     Toast.makeText(this, "Saved Successfully", Toast.LENGTH_SHORT).show()
-
-                    val intent = Intent(this, SettingsActivity::class.java)
-                    startActivity(intent)
                 }
     }
 }

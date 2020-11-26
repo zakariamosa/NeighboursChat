@@ -46,5 +46,6 @@
     <string name="block_text">Block</string>
     <string name="settings_text_toolbar">SETTINGS</string>
     <string name="block_user_text_toolbar">BLOCK USER</string>
+    <string name="set_distance_text_toolbar">SET DISTANCE</string>
 
 </resources>
