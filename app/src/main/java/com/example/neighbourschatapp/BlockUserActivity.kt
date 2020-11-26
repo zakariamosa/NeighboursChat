@@ -1,10 +1,13 @@
 package com.example.neighbourschatapp
 
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
+import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.*
@@ -77,6 +80,13 @@ class BlockUserActivity : AppCompatActivity() {
             }
         }
         locationRequest = creatLocationRequest()
+
+        val backButtonBlockUser: ImageView = findViewById(R.id.iv_back_button_block_user_toolbar)
+        backButtonBlockUser.setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
     }
 
     private fun fetchUsers() {
