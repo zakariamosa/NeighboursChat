@@ -22,7 +22,7 @@ import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.fragment_register.*
 
 class SettingsActivity : AppCompatActivity() {
-    lateinit var locationDistance:EditText
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -31,13 +31,13 @@ class SettingsActivity : AppCompatActivity() {
         btnSignOut.setOnClickListener {
             val builder = AlertDialog.Builder(this@SettingsActivity)
             builder.setMessage("Are you sure you want to sign out?")
-                    .setCancelable(false)
-                    .setPositiveButton("Yes") { dialog, id ->
-                        signOut()
-                    }
-                    .setNegativeButton("No") { dialog, id ->
-                        dialog.dismiss()
-                    }
+                .setCancelable(false)
+                .setPositiveButton("Yes") { dialog, id ->
+                    signOut()
+                }
+                .setNegativeButton("No") { dialog, id ->
+                    dialog.dismiss()
+                }
             val alert = builder.create()
             alert.show()
         }
@@ -45,49 +45,38 @@ class SettingsActivity : AppCompatActivity() {
         btnDeleteAccount.setOnClickListener {
             val builder = AlertDialog.Builder(this@SettingsActivity)
             builder.setMessage("Are you sure you want to delete your account?")
-                    .setCancelable(false)
-                    .setPositiveButton("Yes") { dialog, id ->
-                        deleteAccount()
-                    }
-                    .setNegativeButton("No") { dialog, od ->
-                        dialog.dismiss()
-                    }
+                .setCancelable(false)
+                .setPositiveButton("Yes") { dialog, id ->
+                    deleteAccount()
+                }
+                .setNegativeButton("No") { dialog, od ->
+                    dialog.dismiss()
+                }
             val alert = builder.create()
             alert.show()
         }
-        val buttonNeighbourDistanceSetting=findViewById<Button>(R.id.buttonNeighbourDistanceSetting)
-        buttonNeighbourDistanceSetting.setOnClickListener(){
+        val buttonNeighbourDistanceSetting =
+            findViewById<Button>(R.id.buttonNeighbourDistanceSetting)
+        buttonNeighbourDistanceSetting.setOnClickListener() {
             val intent = Intent(this, SetDistanceActivity::class.java)
             startActivity(intent)
         }
-        val buttonBlockList=findViewById<Button>(R.id.buttonBlock)
-        buttonBlockList.setOnClickListener(){
-            val db = FirebaseFirestore.getInstance()
-            val currentUser = FirebaseAuth.getInstance().currentUser
-            blocklista.clear()
-            val itemRef =db.collection("BlockList").document(currentUser!!.uid).collection("UserBlockedList")
-            itemRef.addSnapshotListener(){snapshot,e->
-                if (snapshot!=null){
-                    for (document in snapshot.documents){
-                        val settingblockuser =document.toObject(User::class.java)
-                        if (settingblockuser!=null){
-                            blocklista.add(settingblockuser)
-                        }
-                    }
+        val buttonBlockList = findViewById<Button>(R.id.buttonBlock)
+        buttonBlockList.setOnClickListener() {
 
-                    callUserBlockListSetting()
-                }
-
-            }
+            val intent = Intent(this, BlockUserActivity::class.java)
+            startActivity(intent)
 
         }
-        supportActionBar?.title = "Settings"
     }
-
+/*
     private fun callUserBlockListSetting() {
 
+        val intent = Intent(this, BlockUserActivity::class.java)
+        startActivity(intent)
+
         container.visibility = View.VISIBLE
-        toggleVisibility()
+        //toggleVisibility()
 
         val blockListSettingFragment =  fragment_block_user.newInstance("","")
 
@@ -97,6 +86,8 @@ class SettingsActivity : AppCompatActivity() {
 
         transaction.commit()
     }
+
+ */
 
     private fun signOut() {
         FirebaseAuth.getInstance().signOut()
@@ -126,7 +117,7 @@ class SettingsActivity : AppCompatActivity() {
                 Toast.makeText(this, "Failed to delete account", Toast.LENGTH_SHORT).show()
             }
     }
-
+/*
     private fun toggleVisibility() {
         if (container.visibility == View.VISIBLE) {
             btn_sign_out.visibility = View.INVISIBLE
@@ -143,4 +134,5 @@ class SettingsActivity : AppCompatActivity() {
 
     }
 
+ */
 }

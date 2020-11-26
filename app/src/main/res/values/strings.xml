@@ -43,5 +43,6 @@
     <string name="update_profile_toolbar">EDIT PROFILE</string>
     <string name="start_new_chat_toolbar">WHO IS NEAR YOU?</string>
     <string name="info_message_toolbar_new_chat">Click on user to start new conversation</string>
+    <string name="block_text">Block</string>
 
 </resources>
