@@ -12,6 +12,8 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.app.NotificationCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
@@ -22,6 +24,7 @@ import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.coroutines.CoroutineScope
@@ -46,6 +49,9 @@ class ChatLogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
 
+        val backButtonToolbar: ImageView = findViewById(R.id.iv_back_button_chat_log_toolbar)
+        val chatPartnerNameToolbar: TextView = findViewById(R.id.tv_chat_partner_name_chat_logtoolbar)
+
         val db=FirebaseFirestore.getInstance()
         FirebaseService.sharedPref = getSharedPreferences("sharedPref", Context.MODE_PRIVATE)
         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener {
@@ -57,7 +63,7 @@ class ChatLogActivity : AppCompatActivity() {
 
 
         toUser = intent.getParcelableExtra<User>("username")
-        supportActionBar?.title = toUser?.userName
+        chatPartnerNameToolbar.text = toUser?.userName
         rcvChatLog = findViewById(R.id.recycler_view_chat_log)
         val btnSendChatLog: Button = findViewById(R.id.btn_send_chat_log)
         rcvChatLog.adapter = adapter
@@ -85,6 +91,11 @@ class ChatLogActivity : AppCompatActivity() {
                     }
                 }
 
+        }
+        backButtonToolbar.setOnClickListener {
+            val intent = Intent(this, ChatActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
         }
     }
 

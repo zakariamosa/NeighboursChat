@@ -19,11 +19,11 @@
         android:textColor="@android:color/black"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/iv_user_photo"
-        app:layout_constraintTop_toTopOf="@+id/iv_user_photo" />
+        app:layout_constraintStart_toEndOf="@+id/iv_user_photo_toolbar"
+        app:layout_constraintTop_toTopOf="@+id/iv_user_photo_toolbar" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/iv_user_photo"
+        android:id="@+id/iv_user_photo_toolbar"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="15dp"
@@ -42,7 +42,7 @@
         android:layout_marginStart="16dp"
         android:text="About"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_user_photo"
+        app:layout_constraintStart_toEndOf="@+id/iv_user_photo_toolbar"
         app:layout_constraintTop_toBottomOf="@+id/tv_user_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

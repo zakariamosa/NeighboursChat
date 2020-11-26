@@ -1,16 +1,12 @@
 package com.example.neighbourschatapp
 
-import android.util.Log
-import android.view.View
 import android.widget.Toast
-import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_block_user_row.view.*
-
 
 
 class BlockUserItem(val user: User) : Item<ViewHolder>() {
@@ -20,12 +16,11 @@ class BlockUserItem(val user: User) : Item<ViewHolder>() {
     }
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.tv_block_user_name.text = user.userName
-        //Picasso.get().load(user.userImageUrl).into(viewHolder.itemView.iv_block_user_photo)
+        Picasso.get().load(user.userImageUrl).into(viewHolder.itemView.iv_block_user_photo)
         viewHolder.itemView.checkBoxSelecttoBlock.isChecked=when(isuserblocked(blocklista,user)){
             true->true
             false->false
         }
-        //Log.d("!!!!",user.userEmail)
         viewHolder.itemView.checkBoxSelecttoBlock.setOnClickListener{
             val select=viewHolder.itemView.checkBoxSelecttoBlock.isChecked
             val userId = FirebaseAuth.getInstance().uid ?: ""
@@ -56,18 +51,8 @@ class BlockUserItem(val user: User) : Item<ViewHolder>() {
                                     }
                                 }
                             }
-                }//Log.d("BlockUserItem","${user.userEmail} + selected: $select +position: $position")
+                }
             }
-            /*val select=viewHolder.itemView.checkBoxSelecttoBlock.isChecked
-            myitems[Position].itemSelected=select
-            when(select){
-                true->{
-                    Toast.makeText(context, "${myitems[itemPosition].itemName} is Selected", Toast.LENGTH_SHORT).show()}
-                false->{
-                    Toast.makeText(context, "${myitems[itemPosition].itemName} is no longer Selected", Toast.LENGTH_SHORT).show()}
-            }
-
-            notifyDataSetChanged()*/
         }
     }
 
@@ -83,6 +68,4 @@ class BlockUserItem(val user: User) : Item<ViewHolder>() {
 
         return false
     }
-
-
 }

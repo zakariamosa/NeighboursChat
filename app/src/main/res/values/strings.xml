@@ -28,7 +28,8 @@
     <string name="second_screen_des">Find people and start conversation in th easiest and most comfortable way that you can imagine.</string>
     <string name="third_screen_title">Find own kind</string>
     <string name="third_screen_des">Get the one with the same interest, now you will never have to go solo again.</string>
-    <string name="setting_set_distance">Please insert the distance to search for online users (max 10KM).</string>
+    <string name="setting_set_distance">Search Distance</string>
+    <string name="zero_km">0 kilometers</string>
     <string name="privacy_policy">Read our privacy policy</string>
     <string name="user_deleted">User deleted</string>
     <string name="i_agree">I agree to the Privacy Policy</string>
@@ -36,6 +37,15 @@
     <string name="age">Age</string>
     <string name="update_profile">Update profile</string>
     <string name="about">About</string>
+    <string name="iv_content_description">ImageView</string>
     <string name="save">SAVE</string>
+    <string name="recent_chats_toolbar">LATEST CHATS</string>
+    <string name="update_profile_toolbar">EDIT PROFILE</string>
+    <string name="start_new_chat_toolbar">WHO IS NEAR YOU?</string>
+    <string name="info_message_toolbar_new_chat">Click on user to start new conversation</string>
+    <string name="block_text">Block</string>
+    <string name="settings_text_toolbar">SETTINGS</string>
+    <string name="block_user_text_toolbar">BLOCK USER</string>
+    <string name="set_distance_text_toolbar">SET DISTANCE</string>
 
 </resources>

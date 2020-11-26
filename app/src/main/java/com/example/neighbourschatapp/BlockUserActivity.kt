@@ -2,70 +2,57 @@ package com.example.neighbourschatapp
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.Image
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.ImageView
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.location.*
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [fragment_block_user.newInstance] factory method to
- * create an instance of this fragment.
- */
-class fragment_block_user : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class BlockUserActivity : AppCompatActivity() {
 
     lateinit var rcvUsers: RecyclerView
     private val REQUEST_LOCATION = 1
     lateinit var locationProvider: FusedLocationProviderClient
-    var locationRequest : LocationRequest? = null
+    var locationRequest: LocationRequest? = null
     lateinit var locationCallback: LocationCallback
-    private var currentuserlat:Double=0.0
-    private var currentuserlong:Double=0.0
+    private var currentuserlat: Double = 0.0
+    private var currentuserlong: Double = 0.0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        setContentView(R.layout.activity_block_user)
+
+        val db = FirebaseFirestore.getInstance()
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        blocklista.clear()
+        val itemRef =
+            db.collection("BlockList").document(currentUser!!.uid).collection("UserBlockedList")
+        itemRef.addSnapshotListener() { snapshot, e ->
+            if (snapshot != null) {
+                for (document in snapshot.documents) {
+                    val settingblockuser = document.toObject(User::class.java)
+                    if (settingblockuser != null) {
+                        blocklista.add(settingblockuser)
+                    }
+                }
+            }
         }
-    }
+        rcvUsers = findViewById(R.id.rcv_block_user)
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val myview=inflater.inflate(R.layout.fragment_block_user, container, false)
-        rcvUsers = myview.findViewById(R.id.recycler_view_block_users)
-
-        (context as AppCompatActivity).supportActionBar!!.title = "Block user"
 
         val adapter = GroupAdapter <ViewHolder>()
         rcvUsers.adapter = adapter
 
-
-        //currentUserSettings=loadUserSettings()
-        locationProvider = LocationServices.getFusedLocationProviderClient(this@fragment_block_user.context!!)
+        locationProvider = LocationServices.getFusedLocationProviderClient(this)
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
 
@@ -74,10 +61,11 @@ class fragment_block_user : Fragment() {
                 }
             }
         }
-        if( ActivityCompat.checkSelfPermission(this@fragment_block_user.context!!, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
+
+        if( ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) !=
             PackageManager.PERMISSION_GRANTED) {
             Log.d("!!!", "no permission")
-            ActivityCompat.requestPermissions(this@fragment_block_user.activity!!, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
                 REQUEST_LOCATION)
         } else {
             locationProvider.lastLocation.addOnSuccessListener { location ->
@@ -93,13 +81,12 @@ class fragment_block_user : Fragment() {
         }
         locationRequest = creatLocationRequest()
 
-        var returntosettings=myview.findViewById<FloatingActionButton>(R.id.floatingActionButton)
-        returntosettings.setOnClickListener(){
-            val intent = Intent(this@fragment_block_user.context, SettingsActivity::class.java)
+        val backButtonBlockUser: ImageView = findViewById(R.id.iv_back_button_block_user_toolbar)
+        backButtonBlockUser.setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
-
-        return myview
     }
 
     private fun fetchUsers() {
@@ -121,10 +108,9 @@ class fragment_block_user : Fragment() {
                         itemRef.addOnCompleteListener(){
                             if (it.isSuccessful){
                                 val distancefrommeinkm=distance(currentuserlat,currentuserlong,user.lastLocationLat,user.lastLocationLong)
-                                //Toast.makeText(this,distancefrommeinkm.toString() , Toast.LENGTH_SHORT).show()
+
                                 if (distancefrommeinkm<it.result.data?.get("locationDistance").toString().toDouble()){
-                                    //Toast.makeText(this,it.result.data?.get("locationDistance").toString() , Toast.LENGTH_SHORT).show()
-                                    //adapter.add(UserItem(user))
+
                                     adapter.add(BlockUserItem(user))
                                 }
 
@@ -134,13 +120,6 @@ class fragment_block_user : Fragment() {
                 }
             }
             adapter.setOnItemClickListener { item, view ->
-                /*val userItem = item as UserItem
-                val intent = Intent(view.context, ChatLogActivity::class.java)
-                intent.putExtra("username", userItem.user)
-                startActivity(intent)
-                this@fragment_block_user.activity!!.finish()*/
-
-
             }
             rcvUsers.adapter = adapter
         }
@@ -158,7 +137,7 @@ class fragment_block_user : Fragment() {
     }
 
     fun startLocationUpdates() {
-        if( ActivityCompat.checkSelfPermission(this@fragment_block_user.context!!, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
+        if( ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) ==
             PackageManager.PERMISSION_GRANTED) {
             locationProvider.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
         }
@@ -185,7 +164,6 @@ class fragment_block_user : Fragment() {
             }
         }
     }
-
     //Here getting distance in kilometers (km)
     private fun distance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
         val theta = lon1 - lon2
@@ -206,25 +184,5 @@ class fragment_block_user : Fragment() {
 
     private fun rad2deg(rad: Double): Double {
         return rad * 180.0 / Math.PI
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment fragment_block_user.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            fragment_block_user().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

@@ -2,10 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#B4E6F5"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewMessageActivity">
+    android:background="@drawable/city_background"
+    tools:context=".BlockUserActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -27,23 +27,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_users"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-
     <TextView
-        android:id="@+id/tv_new_chat_toolbar"
+        android:id="@+id/tv_block_user_toolbar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         android:fontFamily="@font/bitter"
-        android:text="@string/start_new_chat_toolbar"
+        android:text="@string/block_user_text_toolbar"
         android:textColor="@android:color/black"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -52,20 +41,8 @@
         app:layout_constraintStart_toStartOf="@+id/toolbar"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_info_message_toolbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="@string/info_message_toolbar_new_chat"
-        android:fontFamily="@font/bitter"
-        app:layout_constraintBottom_toTopOf="@+id/border_toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/toolbar"
-        app:layout_constraintTop_toBottomOf="@+id/tv_new_chat_toolbar" />
-
     <ImageView
-        android:id="@+id/iv_back_button_new_chat_toolbar"
+        android:id="@+id/iv_back_button_block_user_toolbar"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="15dp"
@@ -77,5 +54,16 @@
         app:srcCompat="@drawable/back_button_line_toolbar"
         android:contentDescription="@string/iv_content_description" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcv_block_user"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:tag="blockuserlist"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:listitem="@layout/activity_block_user_row" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
