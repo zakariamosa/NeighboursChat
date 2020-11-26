@@ -84,7 +84,6 @@ class RegisterFragment: Fragment() {
             transaction.commit()
         }
         tvPrivacyPolicy.setOnClickListener {
-            //context?.let { it1 -> openPrivacy("https://www.dropbox.com/s/zahk5dr8qm5vh2y/Near%20Peer%20Privacy%20Policy.txt?dl=0", it1) }
             val builder = this@RegisterFragment.context?.let { it1 -> AlertDialog.Builder(it1) }
             builder!!.setMessage("**Privacy Policy**\n" +
                     "\n" +
