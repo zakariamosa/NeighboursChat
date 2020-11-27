@@ -116,12 +116,14 @@ class ChatActivity : AppCompatActivity() {
 
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 chatMessage = snapshot.getValue(ChatMessage::class.java)?: return
+                if(blocklista.any { bl->bl.userId==chatMessage.toId }){return}
                 latestMessagesMap[snapshot.key!!] = chatMessage
                 refreshRecyclerView()
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                 chatMessage = snapshot.getValue(ChatMessage::class.java)?: return
+                if(blocklista.any { bl->bl.userId==chatMessage.toId }){return}
                 latestMessagesMap[snapshot.key!!] = chatMessage
                 refreshRecyclerView()
 
