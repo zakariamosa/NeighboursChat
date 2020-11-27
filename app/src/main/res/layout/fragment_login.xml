@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="200dp"
+        android:layout_marginTop="300dp"
         android:layout_marginEnd="32dp"
         android:autofillHints="@string/e_mail"
         android:background="@drawable/rounded_edittext_register_login"
@@ -66,6 +66,21 @@
         app:layout_constraintEnd_toEndOf="@+id/login_button_login"
         app:layout_constraintStart_toStartOf="@+id/login_button_login"
         app:layout_constraintTop_toBottomOf="@+id/login_button_login" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageView"
+        android:layout_width="0dp"
+        android:layout_height="177dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/untitled"
+        app:civ_border_color="@android:color/black"
+        app:civ_border_width="2dp"
+        app:layout_constraintBottom_toTopOf="@+id/email_edittext_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
