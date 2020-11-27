@@ -108,7 +108,29 @@ class ChatActivity : AppCompatActivity() {
 
     }
 
+    private fun addBlockList() {
+        val userId = FirebaseAuth.getInstance().uid
+
+        val db = FirebaseFirestore.getInstance()
+        blocklista.clear()
+        if (userId != null) {
+            val itemRef = db.collection("BlockList").document(userId).collection("UserBlockedList")
+            itemRef.addSnapshotListener() { snapshot, e ->
+                if (snapshot != null) {
+                    for (document in snapshot.documents) {
+                        val settingblockuser = document.toObject(User::class.java)
+                        if (settingblockuser != null) {
+                            blocklista.add(settingblockuser)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     private fun listenForLatestMessages() {
+
+        addBlockList()
 
         val fromId = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId")
