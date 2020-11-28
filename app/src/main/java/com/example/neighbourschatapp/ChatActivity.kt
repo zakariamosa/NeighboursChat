@@ -8,6 +8,7 @@ import android.provider.DocumentsContract
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
@@ -21,6 +22,7 @@ import com.google.firebase.firestore.*
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import kotlinx.android.synthetic.main.activity_chat.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -97,14 +99,16 @@ class ChatActivity : AppCompatActivity() {
     }
     private fun refreshRecyclerView() {
         val list = ArrayList<ChatMessage>()
-        adapter.clear()
-        latestMessagesMap.values.forEach {
-            list.add(it)
-        }
-        list.sortByDescending { it.timeStamp }
-        for (message in list) {
-            adapter.add(0, LatestMessageChatRow(message))
-        }
+
+            adapter.clear()
+            latestMessagesMap.values.forEach {
+                list.add(it)
+            }
+            list.sortByDescending { it.timeStamp }
+            for (message in list) {
+                adapter.add(0, LatestMessageChatRow(message))
+            }
+
 
     }
 
@@ -117,6 +121,8 @@ class ChatActivity : AppCompatActivity() {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 chatMessage = snapshot.getValue(ChatMessage::class.java)?: return
                 if(blocklista.any { bl->bl.userId==chatMessage.toId }){return}
+                if(deletedUsers.any { bl->bl==chatMessage.toId }){return}
+
                 latestMessagesMap[snapshot.key!!] = chatMessage
                 refreshRecyclerView()
             }
@@ -124,6 +130,7 @@ class ChatActivity : AppCompatActivity() {
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                 chatMessage = snapshot.getValue(ChatMessage::class.java)?: return
                 if(blocklista.any { bl->bl.userId==chatMessage.toId }){return}
+                if(deletedUsers.any { bl->bl==chatMessage.toId }){return}
                 latestMessagesMap[snapshot.key!!] = chatMessage
                 refreshRecyclerView()
 

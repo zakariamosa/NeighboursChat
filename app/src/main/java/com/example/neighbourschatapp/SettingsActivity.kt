@@ -91,6 +91,7 @@ class SettingsActivity : AppCompatActivity() {
         startActivity(intent)
     }
     private fun deleteAccount() {
+        deletedUsers.add(userId)
         db.collection("users").document(userId).delete()
         FirebaseAuth.getInstance().signOut()
         val intent = Intent(this, MainActivity::class.java)

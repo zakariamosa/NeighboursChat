@@ -89,4 +89,5 @@
         app:layout_constraintEnd_toEndOf="@+id/iv_new_message_toolbar"
         app:layout_constraintStart_toStartOf="@+id/toolbar"
         app:layout_constraintTop_toTopOf="@+id/toolbar" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
