@@ -98,7 +98,9 @@ class LoginFragment: Fragment() {
 
                 Log.d("Main", "user succefully logged in with uid ${it.result?.user?.uid}")
                 updateuserlocation(it.result?.user?.uid)
-                fillBlockList()
+                //fillBlockList()
+                val theGeneralclass=General()
+                theGeneralclass.getblockedUsers()
                 val intent = Intent(this@LoginFragment.context, ChatActivity::class.java)
                 //Denna rad rensar upp i tidigare aktiviteter
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -111,7 +113,7 @@ class LoginFragment: Fragment() {
             }
     }
 
-    private fun fillBlockList() {
+ /*   private fun fillBlockList() {
         val db = FirebaseFirestore.getInstance()
         val currentUser = FirebaseAuth.getInstance().currentUser
         blocklista.clear()
@@ -128,7 +130,7 @@ class LoginFragment: Fragment() {
             }
 
         }
-    }
+    }*/
 
     private fun updateuserlocation(uid: String?) {
 

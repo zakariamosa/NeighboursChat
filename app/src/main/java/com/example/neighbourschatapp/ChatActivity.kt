@@ -21,6 +21,7 @@ import com.google.firebase.firestore.*
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import kotlinx.coroutines.delay
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -108,29 +109,15 @@ class ChatActivity : AppCompatActivity() {
 
     }
 
-    private fun addBlockList() {
-        val userId = FirebaseAuth.getInstance().uid
-
-        val db = FirebaseFirestore.getInstance()
-        blocklista.clear()
-        if (userId != null) {
-            val itemRef = db.collection("BlockList").document(userId).collection("UserBlockedList")
-            itemRef.addSnapshotListener() { snapshot, e ->
-                if (snapshot != null) {
-                    for (document in snapshot.documents) {
-                        val settingblockuser = document.toObject(User::class.java)
-                        if (settingblockuser != null) {
-                            blocklista.add(settingblockuser)
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     private fun listenForLatestMessages() {
 
-        addBlockList()
+        val theGeneralclass=General()
+        val blocklistfilledup=theGeneralclass.getblockedUsers()
+        if (!blocklistfilledup){
+            Thread.sleep(1_00)
+        }
+
 
         val fromId = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId")
@@ -138,14 +125,14 @@ class ChatActivity : AppCompatActivity() {
 
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 chatMessage = snapshot.getValue(ChatMessage::class.java)?: return
-                if(blocklista.any { bl->bl.userId==chatMessage.toId }){return}
+                if(blocklistaMeAndThem.any { bl->bl.userId==chatMessage.toId }){return}
                 latestMessagesMap[snapshot.key!!] = chatMessage
                 refreshRecyclerView()
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                 chatMessage = snapshot.getValue(ChatMessage::class.java)?: return
-                if(blocklista.any { bl->bl.userId==chatMessage.toId }){return}
+                if(blocklistaMeAndThem.any { bl->bl.userId==chatMessage.toId }){return}
                 latestMessagesMap[snapshot.key!!] = chatMessage
                 refreshRecyclerView()
 
