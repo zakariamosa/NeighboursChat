@@ -3,16 +3,21 @@ package com.example.neighbourschatapp
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.provider.ContactsContract
+import android.provider.DocumentsContract
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SortedList
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.database.*
+import com.google.firebase.database.Query
+import com.google.firebase.firestore.*
 import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
@@ -24,13 +29,10 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
-
 class ChatActivity : AppCompatActivity() {
 
     companion object {
         var currentUser: User? = null
-        var deletedUsers = mutableListOf<DeletedUser>()
-
     }
     lateinit var userImageToolBar: ImageView
     val latestMessagesMap = HashMap <String, ChatMessage>()
@@ -73,10 +75,8 @@ class ChatActivity : AppCompatActivity() {
 
         }
 
-        getDeletedUsers()
         fetchCurrentUser()
         listenForLatestMessages()
-
 
         openUserProfile.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
@@ -98,16 +98,14 @@ class ChatActivity : AppCompatActivity() {
     }
     private fun refreshRecyclerView() {
         val list = ArrayList<ChatMessage>()
-
-            adapter.clear()
-            latestMessagesMap.values.forEach {
-                list.add(it)
-            }
-            list.sortByDescending { it.timeStamp }
-            for (message in list) {
-                adapter.add(0, LatestMessageChatRow(message))
-            }
-
+        adapter.clear()
+        latestMessagesMap.values.forEach {
+            list.add(it)
+        }
+        list.sortByDescending { it.timeStamp }
+        for (message in list) {
+            adapter.add(0, LatestMessageChatRow(message))
+        }
 
     }
 
@@ -127,8 +125,6 @@ class ChatActivity : AppCompatActivity() {
 
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 chatMessage = snapshot.getValue(ChatMessage::class.java)?: return
-
-                if(deletedUsers.any { bl->bl.userId==chatMessage.toId }){return}
                 if(blocklistaMeAndThem.any { bl->bl.userId==chatMessage.toId }){return}
                 latestMessagesMap[snapshot.key!!] = chatMessage
                 refreshRecyclerView()
@@ -136,8 +132,6 @@ class ChatActivity : AppCompatActivity() {
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                 chatMessage = snapshot.getValue(ChatMessage::class.java)?: return
-
-                if(deletedUsers.any { bl->bl.userId==chatMessage.toId }){return}
                 if(blocklistaMeAndThem.any { bl->bl.userId==chatMessage.toId }){return}
                 latestMessagesMap[snapshot.key!!] = chatMessage
                 refreshRecyclerView()
@@ -159,24 +153,10 @@ class ChatActivity : AppCompatActivity() {
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot != null) {
                     currentUser = documentSnapshot.toObject(User::class.java)
-                    //Log.d("!!!!", currentUser!!.userName)
+                    Log.d("!!!!", currentUser!!.userName)
                     Picasso.get().load(currentUser!!.userImageUrl).into(userImageToolBar)
                 }
             }
-    }
-    private fun getDeletedUsers() {
-        val db = FirebaseFirestore.getInstance()
-        db.collection("deleted-users").addSnapshotListener { snapshot, e ->
-            if (snapshot != null) {
-                for (document in snapshot.documents) {
-                    val addDeletedUser = document.toObject(DeletedUser::class.java)
-                    if (addDeletedUser != null) {
-                        deletedUsers.add(addDeletedUser)
-                        //Log.d("!!", "${addDeletedUser.userId}")
-                    }
-                }
-            }
-        }
     }
 }
 
