@@ -62,8 +62,9 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toEndOf="@+id/toolbar"
+        app:layout_constraintEnd_toStartOf="@+id/iv_settings_toolbar"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.375"
         app:srcCompat="@drawable/find_friends_toolbar_edited" />
 
     <ImageView
@@ -72,7 +73,7 @@
         android:layout_height="35dp"
         android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-        app:layout_constraintEnd_toStartOf="@+id/iv_new_message_toolbar"
+        app:layout_constraintEnd_toEndOf="@+id/toolbar"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/settings_black_toolbar" />
 

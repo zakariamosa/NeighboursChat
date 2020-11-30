@@ -55,6 +55,20 @@
         android:contentDescription="@string/iv_content_description" />
 
 
+    <ImageView
+        android:id="@+id/iv_home_button_set_distance_toolbar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="5dp"
+        android:contentDescription="@string/iv_content_description"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/home_icon_white_b_toolbar" />
+
     <TextView
         android:id="@+id/tv_set_distance_info"
         android:layout_width="wrap_content"
@@ -64,7 +78,7 @@
         android:text="@string/setting_set_distance"
         android:textColor="@android:color/black"
         android:textSize="18sp"
-        android:textStyle="bold"
+        android:fontFamily="@font/bitter"
         app:layout_constraintBottom_toTopOf="@+id/location_seekBar"
         app:layout_constraintStart_toStartOf="@+id/location_seekBar" />
 
@@ -72,12 +86,14 @@
         android:id="@+id/location_seekBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:minHeight="2dip"
+        android:maxHeight="5dip"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="70dp"
         android:max="10"
         android:progressDrawable="@drawable/seekbar_style"
-        android:thumb="@drawable/costum_thumb"
+        android:thumb="@drawable/custom_thumb"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -93,7 +109,7 @@
         android:text="@string/zero_km"
         android:textColor="@android:color/black"
         android:textSize="18sp"
-        android:textStyle="bold"
+        android:fontFamily="@font/bitter"
         app:layout_constraintBottom_toTopOf="@+id/location_seekBar"
         app:layout_constraintEnd_toEndOf="@+id/location_seekBar" />
 
