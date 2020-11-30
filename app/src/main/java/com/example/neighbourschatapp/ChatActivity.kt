@@ -34,6 +34,8 @@ class ChatActivity : AppCompatActivity() {
 
     companion object {
         var currentUser: User? = null
+        var deletedUsers = mutableListOf<DeletedUser>()
+
     }
     lateinit var userImageToolBar: ImageView
     val latestMessagesMap = HashMap <String, ChatMessage>()
@@ -76,8 +78,10 @@ class ChatActivity : AppCompatActivity() {
 
         }
 
+        getDeletedUsers()
         fetchCurrentUser()
         listenForLatestMessages()
+
 
         openUserProfile.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
@@ -121,7 +125,7 @@ class ChatActivity : AppCompatActivity() {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 chatMessage = snapshot.getValue(ChatMessage::class.java)?: return
                 if(blocklista.any { bl->bl.userId==chatMessage.toId }){return}
-                if(deletedUsers.any { bl->bl==chatMessage.toId }){return}
+                if(deletedUsers.any { bl->bl.userId==chatMessage.toId }){return}
 
                 latestMessagesMap[snapshot.key!!] = chatMessage
                 refreshRecyclerView()
@@ -130,7 +134,7 @@ class ChatActivity : AppCompatActivity() {
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                 chatMessage = snapshot.getValue(ChatMessage::class.java)?: return
                 if(blocklista.any { bl->bl.userId==chatMessage.toId }){return}
-                if(deletedUsers.any { bl->bl==chatMessage.toId }){return}
+                if(deletedUsers.any { bl->bl.userId==chatMessage.toId }){return}
                 latestMessagesMap[snapshot.key!!] = chatMessage
                 refreshRecyclerView()
 
@@ -151,10 +155,24 @@ class ChatActivity : AppCompatActivity() {
             .addOnSuccessListener { documentSnapshot ->
                 if (documentSnapshot != null) {
                     currentUser = documentSnapshot.toObject(User::class.java)
-                    Log.d("!!!!", currentUser!!.userName)
+                    //Log.d("!!!!", currentUser!!.userName)
                     Picasso.get().load(currentUser!!.userImageUrl).into(userImageToolBar)
                 }
             }
+    }
+    private fun getDeletedUsers() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("deleted-users").addSnapshotListener { snapshot, e ->
+            if (snapshot != null) {
+                for (document in snapshot.documents) {
+                    val addDeletedUser = document.toObject(DeletedUser::class.java)
+                    if (addDeletedUser != null) {
+                        deletedUsers.add(addDeletedUser)
+                        //Log.d("!!", "${addDeletedUser.userId}")
+                    }
+                }
+            }
+        }
     }
 }
 

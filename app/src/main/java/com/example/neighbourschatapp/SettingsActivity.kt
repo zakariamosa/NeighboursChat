@@ -1,23 +1,13 @@
 package com.example.neighbourschatapp
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.CountDownTimer
-import android.util.Log
-import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.AlertDialog
-import androidx.core.text.set
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.EmailAuthCredential
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_settings.*
-import kotlinx.android.synthetic.main.fragment_register.*
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -91,7 +81,8 @@ class SettingsActivity : AppCompatActivity() {
         startActivity(intent)
     }
     private fun deleteAccount() {
-        deletedUsers.add(userId)
+        val deletedUser = DeletedUser(userId)
+        db.collection("deleted-users").document(userId).set(deletedUser)
         db.collection("users").document(userId).delete()
         FirebaseAuth.getInstance().signOut()
         val intent = Intent(this, MainActivity::class.java)
