@@ -3,6 +3,7 @@ package com.example.neighbourschatapp
 import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -69,6 +70,9 @@ class ChatActivity : AppCompatActivity() {
         getDeletedUsers()
         fetchCurrentUser()
         listenForLatestMessages()
+        for (user in deletedUsers) {
+            Log.d("!!" , "${user.userId}")
+        }
 
 
         openUserProfile.setOnClickListener {

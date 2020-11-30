@@ -21,6 +21,9 @@ import kotlinx.android.synthetic.main.fragment_register.*
 
 class SettingsActivity : AppCompatActivity() {
 
+    val userId = FirebaseAuth.getInstance().uid ?: ""
+    val db = FirebaseFirestore.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -86,25 +89,13 @@ class SettingsActivity : AppCompatActivity() {
         startActivity(intent)
     }
     private fun deleteAccount() {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        currentUser
-                ?.delete()
-                ?.addOnSuccessListener(this) {
-                    Toast.makeText(this, "Your account was successfully deleted " +
-                            "and will be removed from database as soon as possible",
-                        Toast.LENGTH_SHORT).show()
-                    val waitForToast: CountDownTimer = object : CountDownTimer (2000, 1000) {
-                        override fun onFinish() {
-                            val intent = Intent(this@SettingsActivity, MainActivity::class.java)
-                            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            startActivity(intent)
-                        }
-                        override fun onTick(millisUntilFinished: Long) {}
-                    }
-                    waitForToast.start()
-                }
-            ?.addOnFailureListener(this) {
-                Toast.makeText(this, "Failed to delete account", Toast.LENGTH_SHORT).show()
-            }
+        val deletedUser = DeletedUser(userId)
+        db.collection("deleted-users").document(userId).set(deletedUser)
+        db.collection("users").document(userId).delete()
+        FirebaseAuth.getInstance().signOut()
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish()
     }
 }
