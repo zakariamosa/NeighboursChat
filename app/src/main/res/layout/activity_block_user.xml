@@ -54,6 +54,20 @@
         app:srcCompat="@drawable/back_button_line_toolbar"
         android:contentDescription="@string/iv_content_description" />
 
+    <ImageView
+        android:id="@+id/iv_home_button_block_user_toolbar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="5dp"
+        android:contentDescription="@string/iv_content_description"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/home_icon_white_b_toolbar" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcv_block_user"
         android:layout_width="0dp"
