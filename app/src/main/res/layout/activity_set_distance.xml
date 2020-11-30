@@ -78,7 +78,7 @@
         android:text="@string/setting_set_distance"
         android:textColor="@android:color/black"
         android:textSize="18sp"
-        android:textStyle="bold"
+        android:fontFamily="@font/bitter"
         app:layout_constraintBottom_toTopOf="@+id/location_seekBar"
         app:layout_constraintStart_toStartOf="@+id/location_seekBar" />
 
@@ -86,12 +86,14 @@
         android:id="@+id/location_seekBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:minHeight="2dip"
+        android:maxHeight="5dip"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="70dp"
         android:max="10"
         android:progressDrawable="@drawable/seekbar_style"
-        android:thumb="@drawable/costum_thumb"
+        android:thumb="@drawable/custom_thumb"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,7 +109,7 @@
         android:text="@string/zero_km"
         android:textColor="@android:color/black"
         android:textSize="18sp"
-        android:textStyle="bold"
+        android:fontFamily="@font/bitter"
         app:layout_constraintBottom_toTopOf="@+id/location_seekBar"
         app:layout_constraintEnd_toEndOf="@+id/location_seekBar" />
 
