@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 var blocklista= mutableListOf<User>()
+var blocklistaMeAndThem= mutableListOf<User>()
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,7 +19,9 @@ class MainActivity : AppCompatActivity() {
         //Här kontrolleras om användaren är inloggad.
         verifyUserIsLoggedIn()
 
-        addBlockList()
+        //addBlockList()
+        val theGeneralclass=General()
+        theGeneralclass.getblockedUsers()
 
         //Här laddar jag LoginFragment så fort mainactivity startas.
         loadFragment(LoginFragment())
@@ -42,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun addBlockList() {
+    /*private fun addBlockList() {
         val userId = FirebaseAuth.getInstance().uid
 
         val db = FirebaseFirestore.getInstance()
@@ -60,5 +63,5 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
+    }*/
 }
