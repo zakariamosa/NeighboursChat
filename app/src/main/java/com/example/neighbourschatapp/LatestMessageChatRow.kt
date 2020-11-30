@@ -40,7 +40,6 @@ class LatestMessageChatRow(val chatMessage: ChatMessage): Item<ViewHolder>() {
                 viewHolder.itemView.iv_latest_message_read.visibility = View.GONE
             } else if (chatMessage.read == false) {
                 viewHolder.itemView.iv_latest_message_read.visibility = View.VISIBLE
-                //viewHolder.itemView.tv_chat_latest_message.setTypeface(Typeface.DEFAULT, Typeface.BOLD)
                 viewHolder.itemView.tv_chat_latest_message.setTextColor(Color.parseColor("#000000"))
             }
 

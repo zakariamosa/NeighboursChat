@@ -70,11 +70,12 @@ class ChatActivity : AppCompatActivity() {
         getDeletedUsers()
         fetchCurrentUser()
         listenForLatestMessages()
+        /*
         for (user in deletedUsers) {
-            Log.d("!!" , "${user.userId}")
+            Log.d("!!" , "${user.userId} is deleted")
         }
 
-
+         */
         openUserProfile.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -90,8 +91,6 @@ class ChatActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
-
-
     }
     private fun refreshRecyclerView() {
         val list = ArrayList<ChatMessage>()
@@ -104,11 +103,15 @@ class ChatActivity : AppCompatActivity() {
             for (message in list) {
                 adapter.add(0, LatestMessageChatRow(message))
             }
-
-
     }
 
     private fun listenForLatestMessages() {
+
+        val theGeneralclass=General()
+        val blocklistfilledup=theGeneralclass.getblockedUsers()
+        if (!blocklistfilledup){
+            Thread.sleep(1_00)
+        }
 
         val fromId = FirebaseAuth.getInstance().uid
         val ref = FirebaseDatabase.getInstance().getReference("/latest-messages/$fromId")
@@ -116,8 +119,8 @@ class ChatActivity : AppCompatActivity() {
 
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 chatMessage = snapshot.getValue(ChatMessage::class.java)?: return
-                if(blocklista.any { bl->bl.userId==chatMessage.toId }){return}
-                if(deletedUsers.any { bl->bl.userId==chatMessage.toId }){return}
+                if(blocklistaMeAndThem.any { bl->bl.userId==chatMessage.toId || bl.userId==chatMessage.fromId}){return}
+                if(deletedUsers.any { bl->bl.userId==chatMessage.toId || bl.userId==chatMessage.fromId}){return}
 
                 latestMessagesMap[snapshot.key!!] = chatMessage
                 refreshRecyclerView()
@@ -125,8 +128,9 @@ class ChatActivity : AppCompatActivity() {
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
                 chatMessage = snapshot.getValue(ChatMessage::class.java)?: return
-                if(blocklista.any { bl->bl.userId==chatMessage.toId }){return}
-                if(deletedUsers.any { bl->bl.userId==chatMessage.toId }){return}
+                if(blocklistaMeAndThem.any { bl->bl.userId==chatMessage.toId || bl.userId==chatMessage.fromId }){return}
+                if(deletedUsers.any { bl->bl.userId==chatMessage.toId || bl.userId==chatMessage.fromId}){return}
+
                 latestMessagesMap[snapshot.key!!] = chatMessage
                 refreshRecyclerView()
 
