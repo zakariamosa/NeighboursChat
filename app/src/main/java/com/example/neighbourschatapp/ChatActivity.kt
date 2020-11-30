@@ -158,6 +158,21 @@ class ChatActivity : AppCompatActivity() {
                 }
             }
     }
+
+    private fun getDeletedUsers() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("deleted-users").addSnapshotListener { snapshot, e ->
+            if (snapshot != null) {
+                for (document in snapshot.documents) {
+                    val addDeletedUser = document.toObject(DeletedUser::class.java)
+                    if (addDeletedUser != null) {
+                        deletedUsers.add(addDeletedUser)
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 
