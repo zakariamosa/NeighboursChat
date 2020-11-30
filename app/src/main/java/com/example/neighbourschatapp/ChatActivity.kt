@@ -156,7 +156,6 @@ class ChatActivity : AppCompatActivity() {
                     val addDeletedUser = document.toObject(DeletedUser::class.java)
                     if (addDeletedUser != null) {
                         deletedUsers.add(addDeletedUser)
-                        //Log.d("!!", "${addDeletedUser.userId}")
                     }
                 }
             }
