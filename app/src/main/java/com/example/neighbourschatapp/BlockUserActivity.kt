@@ -87,6 +87,12 @@ class BlockUserActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
+        val homeButtonBlockUser: ImageView = findViewById(R.id.iv_home_button_block_user_toolbar)
+        homeButtonBlockUser.setOnClickListener {
+            val intent = Intent(this, ChatActivity::class.java)
+            //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
     }
 
     private fun fetchUsers() {

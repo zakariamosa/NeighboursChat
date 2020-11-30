@@ -1,6 +1,7 @@
 package com.example.neighbourschatapp
 
 import android.content.Intent
+import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -45,6 +46,12 @@ class SetDistanceActivity : AppCompatActivity() {
         backButtonSetDistance.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
+        val homeButtonSetDistance: ImageView = findViewById(R.id.iv_home_button_set_distance_toolbar)
+        homeButtonSetDistance.setOnClickListener {
+            val intent = Intent(this, ChatActivity::class.java)
+            //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
     }
