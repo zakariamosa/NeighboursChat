@@ -11,7 +11,7 @@ class UserItem(val user: User) : Item<ViewHolder>() {
     }
     override fun bind(viewHolder: ViewHolder, position: Int) {
         viewHolder.itemView.tv_user_name.text = "${user.userName}, ${user.userAge}"
-        viewHolder.itemView.tv_user_about.text = user.userInterest
+        viewHolder.itemView.tv_user_about.text = "\"${user.userInterest}\""
         Picasso.get().load(user.userImageUrl).into(viewHolder.itemView.iv_user_photo_toolbar)
     }
 

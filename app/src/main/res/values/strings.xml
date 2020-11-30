@@ -47,5 +47,6 @@
     <string name="settings_text_toolbar">SETTINGS</string>
     <string name="block_user_text_toolbar">BLOCK USER</string>
     <string name="set_distance_text_toolbar">SET DISTANCE</string>
+    <string name="user_about">" %1$s "</string>
 
 </resources>
