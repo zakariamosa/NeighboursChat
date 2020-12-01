@@ -19,14 +19,17 @@ import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 
 class NewMessageActivity : AppCompatActivity() {
+    companion object {
+        var currentuserlat:Double=0.0
+        var currentuserlong:Double=0.0
+    }
 
     lateinit var rcvUsers: RecyclerView
     private val REQUEST_LOCATION = 1
     lateinit var locationProvider: FusedLocationProviderClient
     var locationRequest : LocationRequest? = null
     lateinit var locationCallback: LocationCallback
-    private var currentuserlat:Double=0.0
-    private var currentuserlong:Double=0.0
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,6 +98,7 @@ class NewMessageActivity : AppCompatActivity() {
                             if (it.isSuccessful){
                                 val distancefrommeinkm=distance(currentuserlat,currentuserlong,user.lastLocationLat,user.lastLocationLong)
                                 //Toast.makeText(this,distancefrommeinkm.toString() , Toast.LENGTH_SHORT).show()
+                                Log.d("!!!!","$distancefrommeinkm")
                                 if (distancefrommeinkm<it.result.data?.get("locationDistance").toString().toDouble()){
                                     //Toast.makeText(this,it.result.data?.get("locationDistance").toString() , Toast.LENGTH_SHORT).show()
                                     var showuser:Boolean=true
