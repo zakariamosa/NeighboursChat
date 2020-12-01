@@ -17,7 +17,8 @@ class User (val userId: String,
             val lastLocationLong: Double,
             var userAge: String,
             var userInterest: String,
-            val token:String): Parcelable {
+            val token: String,
+            var distanceFromMe: Int): Parcelable {
     constructor() : this ("","","","",0.0,
-            0.0,"", "", "")
+            0.0,"", "", "", 0)
 }

@@ -3,6 +3,7 @@ package com.example.neighbourschatapp
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
@@ -17,16 +18,24 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
+import kotlin.math.roundToInt
 
 class NewMessageActivity : AppCompatActivity() {
+    companion object {
+        var currentuserlat:Double=0.0
+        var currentuserlong:Double=0.0
+    }
 
     lateinit var rcvUsers: RecyclerView
     private val REQUEST_LOCATION = 1
     lateinit var locationProvider: FusedLocationProviderClient
     var locationRequest : LocationRequest? = null
     lateinit var locationCallback: LocationCallback
-    private var currentuserlat:Double=0.0
-    private var currentuserlong:Double=0.0
+    val adapter = GroupAdapter <ViewHolder>()
+    val userList = ArrayList<User>()
+
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +44,6 @@ class NewMessageActivity : AppCompatActivity() {
 
         val backButtonToolbar: ImageView = findViewById(R.id.iv_back_button_new_chat_toolbar)
         rcvUsers = findViewById(R.id.recycler_view_users)
-        val adapter = GroupAdapter <ViewHolder>()
         rcvUsers.adapter = adapter
 
 
@@ -68,13 +76,13 @@ class NewMessageActivity : AppCompatActivity() {
         }
         locationRequest = creatLocationRequest()
 
+
         backButtonToolbar.setOnClickListener {
             val intent = Intent(this, ChatActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
     }
-    //Denna funktion laddar alla registrerade användare i en recyclerview i realtid, men laddar listan två gånger
     private fun fetchUsers() {
 
         val db = FirebaseFirestore.getInstance()
@@ -94,7 +102,9 @@ class NewMessageActivity : AppCompatActivity() {
                         itemRef.addOnCompleteListener(){
                             if (it.isSuccessful){
                                 val distancefrommeinkm=distance(currentuserlat,currentuserlong,user.lastLocationLat,user.lastLocationLong)
+                                user.distanceFromMe = distancefrommeinkm
                                 //Toast.makeText(this,distancefrommeinkm.toString() , Toast.LENGTH_SHORT).show()
+                                Log.d("!!!!","$distancefrommeinkm")
                                 if (distancefrommeinkm<it.result.data?.get("locationDistance").toString().toDouble()){
                                     //Toast.makeText(this,it.result.data?.get("locationDistance").toString() , Toast.LENGTH_SHORT).show()
                                     var showuser:Boolean=true
@@ -118,7 +128,15 @@ class NewMessageActivity : AppCompatActivity() {
                                                                 }
                                                             }
                                                             if (showuser){
-                                                                adapter.add(UserItem(user))
+                                                                //adapter.add(UserItem(user))
+                                                                adapter.clear()
+                                                                userList.add(user)
+                                                                userList.sortByDescending { it.distanceFromMe }
+                                                                for (sortedUser in userList) {
+                                                                    adapter.add(0, UserItem(sortedUser))
+                                                                }
+
+
                                                             }
                                                         }
                                             }
@@ -184,24 +202,17 @@ class NewMessageActivity : AppCompatActivity() {
     }
 
     //Here getting distance in kilometers (km)
-    private fun distance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
-        val theta = lon1 - lon2
-        var dist = (Math.sin(deg2rad(lat1))
-                * Math.sin(deg2rad(lat2))
-                + (Math.cos(deg2rad(lat1))
-                * Math.cos(deg2rad(lat2))
-                * Math.cos(deg2rad(theta))))
-        dist = Math.acos(dist)
-        dist = rad2deg(dist)
-        dist = dist * 60 * 1.1515
-        return dist
-    }
+    private fun distance(latOne: Double, longOne: Double, latTwo: Double, longTwo: Double): Int {
+        val startLocation = Location("")
+        startLocation.latitude = latOne
+        startLocation.longitude = longOne
 
-    private fun deg2rad(deg: Double): Double {
-        return deg * Math.PI / 180.0
-    }
+        val endLocation = Location("")
+        endLocation.latitude = latTwo
+        endLocation.longitude = longTwo
+        val distanceInKm = startLocation.distanceTo(endLocation) / 1000
 
-    private fun rad2deg(rad: Double): Double {
-        return rad * 180.0 / Math.PI
+        val distance = distanceInKm.roundToInt()
+        return distance
     }
 }
