@@ -34,10 +34,6 @@ class NewMessageActivity : AppCompatActivity() {
     val adapter = GroupAdapter <ViewHolder>()
     val userList = ArrayList<User>()
 
-
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_message)
@@ -45,7 +41,6 @@ class NewMessageActivity : AppCompatActivity() {
         val backButtonToolbar: ImageView = findViewById(R.id.iv_back_button_new_chat_toolbar)
         rcvUsers = findViewById(R.id.recycler_view_users)
         rcvUsers.adapter = adapter
-
 
         //currentUserSettings=loadUserSettings()
         locationProvider = LocationServices.getFusedLocationProviderClient(this)
@@ -75,7 +70,6 @@ class NewMessageActivity : AppCompatActivity() {
             }
         }
         locationRequest = creatLocationRequest()
-
 
         backButtonToolbar.setOnClickListener {
             val intent = Intent(this, ChatActivity::class.java)
@@ -135,14 +129,10 @@ class NewMessageActivity : AppCompatActivity() {
                                                                 for (sortedUser in userList) {
                                                                     adapter.add(0, UserItem(sortedUser))
                                                                 }
-
-
                                                             }
                                                         }
                                             }
-
                                 }
-
                             }
                         }
                     }
