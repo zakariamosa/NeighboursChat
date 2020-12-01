@@ -270,7 +270,7 @@ class RegisterFragment: Fragment() {
         val userId = FirebaseAuth.getInstance().uid ?: ""
         val db = FirebaseFirestore.getInstance()
         val user = User(userId, username_edittext_register.text.toString(), email_edittext_register.text.toString(), userImageUrl,
-            currentuserlat,currentuserlong, userAge, userInterest, "")
+            currentuserlat,currentuserlong, userAge, userInterest, "", 0)
 
         db.collection("users").document(userId).set(user)
             .addOnSuccessListener {
