@@ -1,5 +1,6 @@
 package com.example.neighbourschatapp
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -34,6 +35,7 @@ class General() {
                         if (settingblockuser != null) {
                             if (settingblockuser.userId==userId){
                                 blocklistaMeAndThem.add(settingblockuser)
+                                Log.d("!!", blocklistaMeAndThem.size.toString())
                             }
                         }
                     }
