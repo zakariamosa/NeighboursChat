@@ -92,10 +92,14 @@ class SettingsActivity : AppCompatActivity() {
         val deletedUser = DeletedUser(userId)
         db.collection("deleted-users").document(userId).set(deletedUser)
         db.collection("users").document(userId).delete()
-        FirebaseAuth.getInstance().signOut()
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
-        finish()
+            .addOnSuccessListener {
+                FirebaseAuth.getInstance().signOut()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to delete account, please try again later.", Toast.LENGTH_SHORT).show()
+            }
     }
 }
