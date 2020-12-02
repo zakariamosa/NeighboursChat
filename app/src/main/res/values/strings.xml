@@ -5,7 +5,7 @@
     <string name="e_mail">E-mail</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
-    <string name="go_to_registration">Dont have an account? Go to registration</string>
+    <string name="go_to_registration">Don\'t have an account? Go to registration</string>
     <string name="select_photo">Select photo</string>
     <string name="user_name">Username</string>
     <string name="register">Register</string>
@@ -15,7 +15,7 @@
     <string name="settings">Settings</string>
     <string name="sign_out">Sign out</string>
     <string name="delete_account">Delete account</string>
-    <string name="set_distance">Set searchdistance</string>
+    <string name="set_distance">Set search distance</string>
     <string name="block_user">Block user</string>
     <string name="enter_message">Enter message</string>
     <string name="send">Send</string>
@@ -25,7 +25,7 @@
     <string name="first_screen_title">Meet your neighbour</string>
     <string name="first_screen_des">Ever wonder who is staying next door but never have a chance to meet them?</string>
     <string name="second_screen_title">Start at ease</string>
-    <string name="second_screen_des">Find people and start conversation in th easiest and most comfortable way that you can imagine.</string>
+    <string name="second_screen_des">Find people and start conversation in the easiest and most comfortable way that you can imagine.</string>
     <string name="third_screen_title">Find own kind</string>
     <string name="third_screen_des">Get the one with the same interest, now you will never have to go solo again.</string>
     <string name="setting_set_distance">Search Distance</string>

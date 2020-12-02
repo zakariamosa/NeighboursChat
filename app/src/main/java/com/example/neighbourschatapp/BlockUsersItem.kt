@@ -34,7 +34,7 @@ class BlockUserItem(val user: User) : Item<ViewHolder>() {
                     db.collection("BlockList").document(userId).collection("UserBlockedList").add(user)//.set(blkuser)
                             .addOnSuccessListener {
 
-                                Toast.makeText(viewHolder.itemView.context, "you just blocked ${user.userName} he/she will not be able to chat with you!", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(viewHolder.itemView.context, "You just blocked ${user.userName}, he/she will not be able to chat with you!", Toast.LENGTH_SHORT).show()
                             }
                 }
                 false->{
@@ -46,7 +46,7 @@ class BlockUserItem(val user: User) : Item<ViewHolder>() {
                                     db.collection("BlockList").document(userId).collection("UserBlockedList").document(document.id).delete().addOnCompleteListener(){
                                         if (it.isSuccessful){
                                             blocklista.removeAll { u->u.userId==user.userId }
-                                            Toast.makeText(viewHolder.itemView.context, "you just unblocked ${user.userName} he/she will be able to chat with you!", Toast.LENGTH_SHORT).show()
+                                            Toast.makeText(viewHolder.itemView.context, "You just unblocked ${user.userName}, he/she will be able to chat with you!", Toast.LENGTH_SHORT).show()
                                         }
                                     }
                                 }
