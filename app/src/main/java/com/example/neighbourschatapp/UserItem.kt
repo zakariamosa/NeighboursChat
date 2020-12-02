@@ -22,11 +22,7 @@ class UserItem(val user: User) : Item<ViewHolder>() {
     }
     override fun bind(viewHolder: ViewHolder, position: Int) {
         getDistance(NewMessageActivity.currentuserlat, NewMessageActivity.currentuserlong, user.lastLocationLat, user.lastLocationLong)
-        Log.d(
-            "!!!!",
-            "User: ${user.userName}, Lat: ${NewMessageActivity.currentuserlat}, Long: ${NewMessageActivity.currentuserlong}" +
-                    "Ulat: ${user.lastLocationLat}, Ulong: ${user.lastLocationLong}"
-        )
+
         viewHolder.itemView.tv_user_name.text = "${user.userName}, ${user.userAge}"
         viewHolder.itemView.tv_user_about.text = "\"${user.userInterest}\""
         when (distance < 1 ) {

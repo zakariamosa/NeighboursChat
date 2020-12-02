@@ -41,6 +41,7 @@ class LatestMessageChatRow(val chatMessage: ChatMessage): Item<ViewHolder>() {
             } else if (chatMessage.read == false) {
                 viewHolder.itemView.iv_latest_message_read.visibility = View.VISIBLE
                 viewHolder.itemView.tv_chat_latest_message.setTextColor(Color.parseColor("#000000"))
+                viewHolder.itemView.layout_latest_message.setBackgroundResource(R.drawable.recycler_view_user_background_unread)
             }
 
             val chatPartnerId: String

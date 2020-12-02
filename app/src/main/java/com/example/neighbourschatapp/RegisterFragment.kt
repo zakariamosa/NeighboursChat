@@ -227,8 +227,8 @@ class RegisterFragment: Fragment() {
             Toast.makeText(requireActivity().applicationContext, "Please enter both e-mail and password", Toast.LENGTH_SHORT).show()
             return
         }
-        Log.d("Register", "Email is $eMail")
-        Log.d("Register", "Password is $password")
+        //Log.d("Register", "Email is $eMail")
+        //Log.d("Register", "Password is $password")
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(eMail, password)
             .addOnCompleteListener {
