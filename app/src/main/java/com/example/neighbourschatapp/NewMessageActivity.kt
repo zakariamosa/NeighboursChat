@@ -34,10 +34,6 @@ class NewMessageActivity : AppCompatActivity() {
     val adapter = GroupAdapter <ViewHolder>()
     val userList = ArrayList<User>()
 
-
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_message)

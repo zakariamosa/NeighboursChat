@@ -169,6 +169,7 @@ class ChatLogActivity : AppCompatActivity() {
 
                             adapter.add(ChatItemTo(chatMessage, toUser!!))
                             rcvChatLog.scrollToPosition(adapter.itemCount -1)
+                            FirebaseDatabase.getInstance().getReference("latest-messages/$fromId/$toId/read").setValue(true)
                         }
                     }
                     else if (dc.type == DocumentChange.Type.MODIFIED) {
