@@ -101,7 +101,7 @@ class NewMessageActivity : AppCompatActivity() {
                                 user.distanceFromMe = distancefrommeinkm
                                 //Toast.makeText(this,distancefrommeinkm.toString() , Toast.LENGTH_SHORT).show()
                                 Log.d("!!!!","$distancefrommeinkm")
-                                if (distancefrommeinkm<it.result.data?.get("locationDistance").toString().toDouble()){
+                                if (distancefrommeinkm<=it.result.data?.get("locationDistance").toString().toDouble()){
                                     //Toast.makeText(this,it.result.data?.get("locationDistance").toString() , Toast.LENGTH_SHORT).show()
                                     var showuser:Boolean=true
                                     db.collection("BlockList").document(currentUser.uid).collection("UserBlockedList").whereEqualTo("userId",user.userId)
@@ -125,6 +125,10 @@ class NewMessageActivity : AppCompatActivity() {
                                                             }
                                                             if (showuser){
                                                                 //adapter.add(UserItem(user))
+                                                                if(userList.any { bl->bl.userId==user.userId }){
+                                                                    return@addOnSuccessListener
+                                                                }
+
                                                                 adapter.clear()
                                                                 userList.add(user)
                                                                 userList.sortByDescending { it.distanceFromMe }
